@@ -10,6 +10,12 @@
   "dependencies": {
     "next": "9.5.3",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-paypal-button-v2": "^2.6.2",
+    "webpack": "^4.44.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-plugin-react": "^7.21.3"
   }
 }
