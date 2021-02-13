@@ -26,6 +26,9 @@ export default function CoupleGame() {
           </label>
           <input type="submit" value="Let's play!" />
         </form>
+        <p>
+          Enter comma separated names, e.g. 'Alan,Jen'
+        </p>
       </div>
     )
   }
@@ -38,17 +41,13 @@ export default function CoupleGame() {
         {content}
       </main>
       <footer>
-        <p>Dedicated to my wonderful girlfriend, Jen 😳</p>
+        <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
       </footer>
     </div>
   )
 }
 
-type CoupleGameProps = {
-  players: string[]
-}
-
-function ActualCoupleGame({ players }: CoupleGameProps) {
+function ActualCoupleGame({ players }: { players: string[] }) {
   const [card, setCard] = useState(new Card("Game hasn't started", "Are you ready to play?"))
   const [turn, setTurn] = useState(0)
 
@@ -75,13 +74,13 @@ function ActualCoupleGame({ players }: CoupleGameProps) {
   return (
     <Fragment>
       <p>
-        Players: {players.join(", ")}
+        Players: {players.join(" ❤️ ")}
       </p>
       <p>
         Player turn: {players[turn % players.length]}
       </p>
       <p>
-        Card type: {card.type} 😉🧐
+        Card type: <b>{card.type}</b> 😉🧐
       </p>
       <p>
         {card.text}
