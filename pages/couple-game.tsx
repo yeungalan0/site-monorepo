@@ -1,9 +1,11 @@
 import styles from '../styles/Home.module.css'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as constants from '../constants/couple-game'
 
 export default function CoupleGame() {
   const [card, setCard] = useState(new Card("Game hasn't started", "Are you ready to play?"))
+  const [players, setPlayers] = useState([""])
+  const [turn, setTurn] = useState(0)
 
   useEffect(() => {
     if (localStorage.getItem(constants.INDEXES_KEY) === null) {
@@ -11,18 +13,42 @@ export default function CoupleGame() {
     }
   })
 
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    alert(`Players: ${players} (${players.length})`)
+    event.preventDefault()
+  }
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPlayers(event.target.value.split(","))
+  }
+
+  function nextTurn() {
+    setCard(getCard())
+    setTurn(turn + 1)
+  }
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <h1>Welcome to the couple game! 💕😘</h1>
         <br />
+        <form onSubmit={handleSubmit}>
+          <label>
+            Player names:
+            <input type="text" value={players} onChange={handleChange}/>
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+        <p>
+          Player turn: {players[turn % players.length]}
+        </p>
         <p>
           Card type: {card.type} 😉🧐
         </p>
         <p>
           {card.text}
         </p>
-        <button onClick={() => setCard(getCard())}>
+        <button onClick={() => nextTurn()}>
           Next turn
         </button>
         <br/>
