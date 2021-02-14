@@ -3,6 +3,7 @@ import { REPL_MODE_STRICT } from "node:repl"
 export const GUESS_CARD = 'Guess'
 export const CHALLENGE_CARD = 'Challenge'
 export const INDEXES_KEY = 'possibleIndexes'
+export const PLAYERS_KEY = 'players'
 
 export const GUESS_LIST: string[] = [
     "What is the one thing I would save from my burning house?",
