@@ -2,13 +2,20 @@ import styles from '../styles/Home.module.css'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import * as constants from '../constants/couple-game'
 
+// TODO linting...
+
 export default function CoupleGame() {
   const [players, setPlayers] = useState<string[]>([])
   const playerInput = useRef<HTMLInputElement>(null)
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    setPlayers(playerInput.current!.value.split(","))
-    event.preventDefault()
+    const inputPlayers = playerInput.current!.value.split(',').map(s => s.trim())
+    if (inputPlayers.length < 2 || inputPlayers.includes('')) {
+      alert(`Not enough players detected or an empty player detected! Players: ${inputPlayers.join(', ')}`)
+    } else {
+      setPlayers(inputPlayers)
+      event.preventDefault()
+    }
   }
 
   let content: JSX.Element

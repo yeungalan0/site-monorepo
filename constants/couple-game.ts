@@ -87,7 +87,25 @@ export const GUESS_LIST: string[] = [
     "What is my biggest turn off?",
     "What's my favorite thing we've done together?",
     "What is on my sexual bucket list?",
-    "What do I need to work on?"
+    "What do I need to work on?",
+    "What's my spice tolerance on a level of 1 (weak) - 5 (hell fire flames)?",
+    "What would I do with 3 extra hours in a day?",
+    "If I could immediately master any skill in the world, what would it be?",
+    "What am I most looking forward to in 10 years?",
+    "What is the one thing I refuse to eat?",
+    "What is one adventurous thing I want us to do as a couple?",
+    "What am I always craving?",
+    "What do I consider to be my greatest flaw?",
+    "Which cartoon character would I want to hang out with?",
+    "What app do I use the most?",
+    "What game have I spent the most time playing?",
+    "What do I wish I was better at?",
+    "What do I love most about our relationship?",
+    "Where are my parents from?",
+    "If I had a spare room in the house, what would I use it for?",
+    "What country do I want to visit the most?",
+    "What is my dream job?",
+    "If I had to survive in the wilderness with 1 other person for a week who would it be?"
   ]
 
 export const CHALLENGE_LIST: string[] = [
@@ -127,4 +145,6 @@ export const CHALLENGE_LIST: string[] = [
     "Kiss your partner like you were in a romantic comedy",
     "Kiss your partner’s bare booty cheek",
     "Let me feed you something, and be as seductive as possible when eating it.",
+    "Take off your shirt for the rest of the game.",
+    "Let me choose an embarrassing photo of you to post on your social media account."
   ]
