@@ -1,5 +1,5 @@
-export const GUESS_CARD = "Guess";
-export const CHALLENGE_CARD = "Challenge";
+export const GUESS_CARD = "Guess 🧐";
+export const CHALLENGE_CARD = "Challenge 😉";
 export const INDEXES_KEY = "possibleIndexes";
 export const PLAYERS_KEY = "players";
 
