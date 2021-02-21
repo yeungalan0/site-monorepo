@@ -197,7 +197,8 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   const classes = useStyles();
   const [card, setCard] = useState(() => drawCard());
   const [turn, setTurn] = useState(0);
-  const [scores, setScores] = useState(() => getStartingScores());
+  // TODO: player and score needs to be an individual object
+  const [scores, setScores] = useState(() => getStartingScores()); 
 
   function init(): void {
     resetCards();
@@ -213,15 +214,11 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
 
   function nextTurn(): void {
     setCard(drawCard());
-    setTurn(turn + 1);
-  }
-
-  function getCurrentPlayerTurn(): string {
-    return players[turn % players.length];
+    setTurn((turn + 1) % players.length);
   }
 
   function pointsEarned() {
-    scores.set(getCurrentPlayerTurn(), getScore(getCurrentPlayerTurn()) + 1);
+    scores.set(players[turn], getScore(players[turn]) + 1);
     setScores(scores);
     nextTurn();
   }
@@ -235,12 +232,19 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
     return score;
   }
 
+  const allCards =
+    constants.GUESS_LIST.length + constants.CHALLENGE_LIST.length;
+  const cardsTodo = JSON.parse(getFromStorage(constants.INDEXES_KEY)).length;
+
   // TODO: Put styles in class
   return (
     <div className={classes.contentStyle}>
       <Grid container direction="column">
-        <Grid container item>
-          {players.map((player) => getPlayerStatCard(player, getScore(player)))}
+        <Grid container item justify="center" spacing={2}>
+          {getPlayerStatCards(players, turn, scores)}
+        </Grid>
+        <Grid item>
+          Card: {cardsTodo}/{allCards}
         </Grid>
         <Grid
           item
@@ -265,13 +269,14 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
               <Typography
                 color="textSecondary"
                 gutterBottom
-                style={{ marginBottom: theme.spacing(6) }}
+                style={{ marginBottom: theme.spacing(3) }}
               >
                 <b>{card.type}</b>
               </Typography>
               <Typography>{card.text}</Typography>
             </CardContent>
             <CardActions>
+              {/* TODO: Buttons outside card since content size shifts them */}
               <Button
                 variant="contained"
                 size="small"
@@ -296,59 +301,79 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => init()}
-            style={{ marginTop: theme.spacing(15) }}
+        <Box
+          height="13vh"
+          display="flex"
+          alignItems="center"
+          alignContent="center"
+          justifyContent="center"
+          textAlign="center"
+          flex="1 0 auto"
+        >
+          <Grid
+            item
+            style={{
+              overflowY: "auto",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: "1",
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "center",
+            }}
           >
-            Reset
-          </Button>
-        </Grid>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => init()}
+            >
+              Reset
+            </Button>
+          </Grid>
+        </Box>
       </Grid>
     </div>
   );
 }
 
-// TODO: duplicate functionality
-{
-  /* function GameStats({
-  players,
-  currentPlayerTurn,
-  scores,
-}: {
-  players: string[];
-  currentPlayerTurn: string;
-  scores: { [k: string]: number };
-}): JSX.Element {
-  const allCards =
-    constants.GUESS_LIST.length + constants.CHALLENGE_LIST.length;
-  const cardsTodo = JSON.parse(getFromStorage(constants.INDEXES_KEY)).length;
+// TODO get working
+function getPlayerStatCards(
+  players: string[],
+  turnIndex: number,
+  score: number
+) {
+  const playerStatCards: JSX.Element[] = [];
 
-  const scoreStrings = Object.entries(scores).map(
-    (score) => `${score[0]}: ${score[1]}`
-  );
+  players.forEach((player, index) => {
+    let props = { color: "textSecondary", gutterBottom: true };
+    if (turnIndex === index) {
+      props = {};
+    }
 
-  const listItems = scoreStrings.map((score) => <li key={score}>{score}</li>);
+    playerStatCards.push(
+      <Grid item>
+        <Card style={{ border: "none", boxShadow: "none" }}>
+          <CardContent>
+            <Typography {...props}>
+              <b>{player}</b>
+            </Typography>
+            <Typography>{score}</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
+  });
 
-  return (
-    <div>
-      <p>
-        Card: {cardsTodo}/{allCards}
-      </p>
-      <ul>{listItems}</ul>
-    </div>
-  );
-} */
+  return playerStatCards;
 }
 
 function getPlayerStatCard(player: string, score: number) {
+  const props = { color: "textSecondary", gutterBottom: true };
   return (
     <Grid item>
-      <Card>
+      <Card style={{ border: "none", boxShadow: "none" }}>
         <CardContent>
-          <Typography color="textSecondary" gutterBottom>
+          <Typography {...props}>
             <b>{player}</b>
           </Typography>
           <Typography>{score}</Typography>
