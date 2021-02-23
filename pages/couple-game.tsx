@@ -9,19 +9,18 @@ import {
   CardContent,
   Grid,
   TextField,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
+
 import Header from "../src/header";
 import { makeStyles } from "@material-ui/styles";
 import theme from "../src/theme";
 
 // style={{ border: "solid 1px", backgroundColor: "orange" }}
 
-// border: "solid 1px",
-// backgroundColor: "orange",
-
 const useStyles = makeStyles(() => ({
-  footerStyle: {
+  footer: {
     top: "auto",
     bottom: 0,
     background: "transparent",
@@ -29,13 +28,13 @@ const useStyles = makeStyles(() => ({
     color: "black",
     textAlign: "center",
   },
-  contentContainerStyle: {
+  contentContainer: {
     height: "92vh",
   },
-  titleStyle: {
-    padding: theme.spacing(4),
+  title: {
+    padding: theme.spacing(2),
   },
-  contentStyle: {
+  content: {
     justifyContent: "center",
     alignItems: "center",
     flex: "1",
@@ -43,8 +42,30 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     textAlign: "center",
   },
-  startStyle: {
+  start: {
     paddingBottom: theme.spacing(3),
+  },
+  cardGrid: {
+    display: "flex",
+  },
+  gameCard: {
+    width: "50%",
+    minWidth: "16vw",
+    height: "32vh",
+    overflow: "auto",
+    maxHeight: "20%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "column",
+  },
+  cardType: {
+    marginBottom: theme.spacing(3),
+  },
+  cardButtons: {
+    justifyContent: "center",
+  },
+  playerStats: {
+    boxShadow: "none",
   },
 }));
 
@@ -85,20 +106,12 @@ export default function CoupleGame(): JSX.Element {
 
   return (
     <Fragment>
-      <Grid
-        container
-        direction="column"
-        className={classes.contentContainerStyle}
-      >
+      <Grid container direction="column" className={classes.contentContainer}>
         <Grid item>
           <Header />
         </Grid>
         <Grid item>
-          <Typography
-            variant="h3"
-            align="center"
-            className={classes.titleStyle}
-          >
+          <Typography variant="h4" align="center" className={classes.title}>
             Welcome to the couple game! 💕😘
           </Typography>
         </Grid>
@@ -117,7 +130,7 @@ export default function CoupleGame(): JSX.Element {
           <Grid item sm={2} md={4} />
         </Grid>
       </Grid>
-      <AppBar position="sticky" className={classes.footerStyle}>
+      <AppBar position="sticky" className={classes.footer}>
         <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
       </AppBar>
     </Fragment>
@@ -145,8 +158,8 @@ function Content({
     return <CoupleGameBoard players={players} />;
   } else {
     return (
-      <div className={classes.contentStyle}>
-        <form onSubmit={handleSubmit} className={classes.startStyle}>
+      <div className={classes.content}>
+        <form onSubmit={handleSubmit} className={classes.start}>
           <div>
             <TextField
               label="Alan,Jen"
@@ -197,19 +210,16 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   const classes = useStyles();
   const [card, setCard] = useState(() => drawCard());
   const [turn, setTurn] = useState(0);
-  // TODO: player and score needs to be an individual object
-  const [scores, setScores] = useState(() => getStartingScores()); 
+  const [playerStats, setPlayerStats] = useState(() => resetPlayerStats());
 
   function init(): void {
     resetCards();
-    setScores(getStartingScores());
+    setPlayerStats(resetPlayerStats());
     setCard(drawCard());
   }
 
-  function getStartingScores() {
-    const startingScores: Map<string, number> = new Map();
-    players.forEach((player) => startingScores.set(player, 0));
-    return startingScores;
+  function resetPlayerStats() {
+    return players.map((player) => new PlayerStat(player, 0));
   }
 
   function nextTurn(): void {
@@ -218,30 +228,20 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   }
 
   function pointsEarned() {
-    scores.set(players[turn], getScore(players[turn]) + 1);
-    setScores(scores);
+    playerStats[turn].incrementScore();
+    setPlayerStats(playerStats);
     nextTurn();
-  }
-
-  function getScore(player: string) {
-    const score = scores.get(player);
-    if (score === undefined) {
-      throw ReferenceError(`Score for player is undefined! player: ${player}`);
-    }
-
-    return score;
   }
 
   const allCards =
     constants.GUESS_LIST.length + constants.CHALLENGE_LIST.length;
   const cardsTodo = JSON.parse(getFromStorage(constants.INDEXES_KEY)).length;
 
-  // TODO: Put styles in class
   return (
-    <div className={classes.contentStyle}>
+    <div className={classes.content}>
       <Grid container direction="column">
         <Grid container item justify="center" spacing={2}>
-          {getPlayerStatCards(players, turn, scores)}
+          {getPlayerStatCards(playerStats, turn)}
         </Grid>
         <Grid item>
           Card: {cardsTodo}/{allCards}
@@ -250,51 +250,33 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           item
           alignItems="center"
           justify="center"
-          style={{ display: "flex" }}
+          className={classes.cardGrid}
         >
-          <Card
-            variant="outlined"
-            style={{
-              width: "50%",
-              minWidth: "16vw",
-              height: "32vh",
-              overflow: "auto",
-              maxHeight: "20%",
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          >
+          <Card variant="outlined" className={classes.gameCard}>
             <CardContent>
               <Typography
                 color="textSecondary"
                 gutterBottom
-                style={{ marginBottom: theme.spacing(3) }}
+                className={classes.cardType}
               >
                 <b>{card.type}</b>
               </Typography>
               <Typography>{card.text}</Typography>
             </CardContent>
-            <CardActions>
+            <CardActions className={classes.cardButtons}>
               {/* TODO: Buttons outside card since content size shifts them */}
               <Button
                 variant="contained"
                 size="small"
                 onClick={() => nextTurn()}
-                style={{
-                  marginLeft: theme.spacing(3),
-                }}
               >
                 Incorrect 😓
               </Button>
+              <Box padding={theme.spacing(0.2)}></Box>
               <Button
                 variant="contained"
                 size="small"
                 onClick={() => pointsEarned()}
-                style={{
-                  marginLeft: "auto",
-                  marginRight: theme.spacing(3),
-                }}
               >
                 Correct 🙂
               </Button>
@@ -310,18 +292,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           textAlign="center"
           flex="1 0 auto"
         >
-          <Grid
-            item
-            style={{
-              overflowY: "auto",
-              justifyContent: "center",
-              alignItems: "center",
-              flex: "1",
-              display: "flex",
-              flexDirection: "column",
-              textAlign: "center",
-            }}
-          >
+          <Grid item>
             <Button
               variant="contained"
               color="secondary"
@@ -336,51 +307,58 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   );
 }
 
-// TODO get working
-function getPlayerStatCards(
-  players: string[],
-  turnIndex: number,
-  score: number
-) {
+function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
+  const classes = useStyles();
   const playerStatCards: JSX.Element[] = [];
 
-  players.forEach((player, index) => {
-    let props = { color: "textSecondary", gutterBottom: true };
+  playerStats.forEach((playerStat, index) => {
+    let props: {
+      color: "initial" | "textSecondary";
+      gutterBottom: boolean;
+      variant: "outlined" | undefined;
+      title: string;
+    } = {
+      color: "textSecondary",
+      gutterBottom: true,
+      variant: undefined,
+      title: "",
+    };
     if (turnIndex === index) {
-      props = {};
+      props = {
+        color: "initial",
+        gutterBottom: false,
+        variant: "outlined",
+        title: "Your turn to earn points!",
+      };
     }
 
     playerStatCards.push(
       <Grid item>
-        <Card style={{ border: "none", boxShadow: "none" }}>
-          <CardContent>
-            <Typography {...props}>
-              <b>{player}</b>
-            </Typography>
-            <Typography>{score}</Typography>
-          </CardContent>
-        </Card>
+        <Tooltip title={props.title}>
+          <Card variant={props.variant} className={classes.playerStats}>
+            <CardContent>
+              <Typography color={props.color} gutterBottom={props.gutterBottom}>
+                <b>{playerStat.name}</b>
+              </Typography>
+              <Typography>{playerStat.score}</Typography>
+            </CardContent>
+          </Card>
+        </Tooltip>
       </Grid>
     );
+
+    if (index !== playerStats.length - 1) {
+      playerStatCards.push(
+        <Grid item>
+          <Box display="flex" alignItems="center" height="100%">
+            ❤️
+          </Box>
+        </Grid>
+      );
+    }
   });
 
   return playerStatCards;
-}
-
-function getPlayerStatCard(player: string, score: number) {
-  const props = { color: "textSecondary", gutterBottom: true };
-  return (
-    <Grid item>
-      <Card style={{ border: "none", boxShadow: "none" }}>
-        <CardContent>
-          <Typography {...props}>
-            <b>{player}</b>
-          </Typography>
-          <Typography>{score}</Typography>
-        </CardContent>
-      </Card>
-    </Grid>
-  );
 }
 
 function getFromStorage(key: string): string {
@@ -399,25 +377,38 @@ function resetCards(): void {
   localStorage.setItem(constants.INDEXES_KEY, JSON.stringify(possibleIndexes));
 }
 
-function drawCard(): CardObj {
+function drawCard(): GameCard {
   const index = getRandomIndexAndUpdateStorage();
   if (index === -1) {
-    return new CardObj("GAME OVER", "All cards completed!");
+    return new GameCard("GAME OVER", "All cards completed!");
   }
 
   if (typeof constants.GUESS_LIST[index] !== "undefined") {
-    return new CardObj(constants.GUESS_CARD, constants.GUESS_LIST[index]);
+    return new GameCard(constants.GUESS_CARD, constants.GUESS_LIST[index]);
   } else {
     const challengeIndex = index - constants.GUESS_LIST.length;
-    return new CardObj(
+    return new GameCard(
       constants.CHALLENGE_CARD,
       constants.CHALLENGE_LIST[challengeIndex]
     );
   }
 }
 
-// TODO: This still needed?
-class CardObj {
+class PlayerStat {
+  name: string;
+  score: number;
+
+  constructor(name: string, score: number) {
+    this.name = name;
+    this.score = score;
+  }
+
+  incrementScore() {
+    this.score += 1;
+  }
+}
+
+class GameCard {
   type: string;
   text: string;
 
