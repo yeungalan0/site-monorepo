@@ -50,19 +50,20 @@ const useStyles = makeStyles(() => ({
   },
   gameCard: {
     width: "50%",
-    minWidth: "16vw",
-    height: "32vh",
+    minWidth: "20vw",
+    height: "20vh",
     overflow: "auto",
     maxHeight: "20%",
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "column",
+    marginBottom: theme.spacing(1),
   },
   cardType: {
     marginBottom: theme.spacing(3),
   },
-  cardButtons: {
-    justifyContent: "center",
+  pointButtons: {
+    display: "flex",
   },
   playerStats: {
     boxShadow: "none",
@@ -237,6 +238,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
     constants.GUESS_LIST.length + constants.CHALLENGE_LIST.length;
   const cardsTodo = JSON.parse(getFromStorage(constants.INDEXES_KEY)).length;
 
+  // TODO: Move reset lower
   return (
     <div className={classes.content}>
       <Grid container direction="column">
@@ -263,28 +265,23 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
               </Typography>
               <Typography>{card.text}</Typography>
             </CardContent>
-            <CardActions className={classes.cardButtons}>
-              {/* TODO: Buttons outside card since content size shifts them */}
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => nextTurn()}
-              >
-                Incorrect 😓
-              </Button>
-              <Box padding={theme.spacing(0.2)}></Box>
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => pointsEarned()}
-              >
-                Correct 🙂
-              </Button>
-            </CardActions>
           </Card>
         </Grid>
+        <Grid item justify="center" className={classes.pointButtons}>
+          <Button variant="contained" size="small" onClick={() => nextTurn()}>
+            Incorrect 😓
+          </Button>
+          <Box padding={theme.spacing(0.2)}></Box>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => pointsEarned()}
+          >
+            Correct 🙂
+          </Button>
+        </Grid>
         <Box
-          height="13vh"
+          height="18vh"
           display="flex"
           alignItems="center"
           alignContent="center"
@@ -311,6 +308,7 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
   const classes = useStyles();
   const playerStatCards: JSX.Element[] = [];
 
+  // TODO: Apply conditional styling here
   playerStats.forEach((playerStat, index) => {
     let props: {
       color: "initial" | "textSecondary";
