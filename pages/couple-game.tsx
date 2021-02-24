@@ -5,7 +5,6 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   Grid,
   TextField,
@@ -213,7 +212,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   const [turn, setTurn] = useState(0);
   const [playerStats, setPlayerStats] = useState(() => resetPlayerStats());
 
-  function init(): void {
+  function init() {
     resetCards();
     setPlayerStats(resetPlayerStats());
     setCard(drawCard());
@@ -223,12 +222,12 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
     return players.map((player) => new PlayerStat(player, 0));
   }
 
-  function nextTurn(): void {
+  function nextTurn() {
     setCard(drawCard());
     setTurn((turn + 1) % players.length);
   }
 
-  function pointsEarned() {
+  function pointEarned() {
     playerStats[turn].incrementScore();
     setPlayerStats(playerStats);
     nextTurn();
@@ -238,7 +237,6 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
     constants.GUESS_LIST.length + constants.CHALLENGE_LIST.length;
   const cardsTodo = JSON.parse(getFromStorage(constants.INDEXES_KEY)).length;
 
-  // TODO: Move reset lower
   return (
     <div className={classes.content}>
       <Grid container direction="column">
@@ -275,7 +273,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           <Button
             variant="contained"
             size="small"
-            onClick={() => pointsEarned()}
+            onClick={() => pointEarned()}
           >
             Correct 🙂
           </Button>
@@ -283,10 +281,8 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
         <Box
           height="18vh"
           display="flex"
-          alignItems="center"
-          alignContent="center"
+          alignItems="flex-end"
           justifyContent="center"
-          textAlign="center"
           flex="1 0 auto"
         >
           <Grid item>
@@ -305,12 +301,11 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
 }
 
 function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
-  const classes = useStyles();
   const playerStatCards: JSX.Element[] = [];
 
-  // TODO: Apply conditional styling here
+  // TODO: Put this type in a central file
   playerStats.forEach((playerStat, index) => {
-    let props: {
+    let inputProps: {
       color: "initial" | "textSecondary";
       gutterBottom: boolean;
       variant: "outlined" | undefined;
@@ -322,7 +317,7 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
       title: "",
     };
     if (turnIndex === index) {
-      props = {
+      inputProps = {
         color: "initial",
         gutterBottom: false,
         variant: "outlined",
@@ -331,18 +326,7 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
     }
 
     playerStatCards.push(
-      <Grid item>
-        <Tooltip title={props.title}>
-          <Card variant={props.variant} className={classes.playerStats}>
-            <CardContent>
-              <Typography color={props.color} gutterBottom={props.gutterBottom}>
-                <b>{playerStat.name}</b>
-              </Typography>
-              <Typography>{playerStat.score}</Typography>
-            </CardContent>
-          </Card>
-        </Tooltip>
-      </Grid>
+      <PlayerStatCard {...inputProps} playerStat={playerStat}></PlayerStatCard>
     );
 
     if (index !== playerStats.length - 1) {
@@ -357,6 +341,37 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
   });
 
   return playerStatCards;
+}
+
+function PlayerStatCard({
+  title,
+  variant,
+  color,
+  gutterBottom,
+  playerStat,
+}: {
+  title: string;
+  variant: "outlined" | undefined;
+  color: "initial" | "textSecondary";
+  gutterBottom: boolean;
+  playerStat: PlayerStat;
+}) {
+  const classes = useStyles();
+
+  return (
+    <Grid item>
+      <Tooltip title={title}>
+        <Card variant={variant} className={classes.playerStats}>
+          <CardContent>
+            <Typography color={color} gutterBottom={gutterBottom}>
+              <b>{playerStat.name}</b>
+            </Typography>
+            <Typography>{playerStat.score}</Typography>
+          </CardContent>
+        </Card>
+      </Tooltip>
+    </Grid>
+  );
 }
 
 function getFromStorage(key: string): string {
