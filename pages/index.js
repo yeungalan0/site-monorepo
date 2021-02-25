@@ -1,27 +1,25 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import React from 'react';
-import Combined from '../components/combined';
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import React from "react";
+import Combined from "../components/combined";
 
 function Description() {
-  const description =  
-  "1. Pay $1 using any of the methods below \n" + 
-  "2. See how many other beautiful people also paid $1 \n" +
-  "3. Celebrate in your new found wisdom \n" + 
-  "(or charge others 50 cents for your new wisdom 😉)"
+  const description =
+    "1. Pay $1 using any of the methods below \n" +
+    "2. See how many other beautiful people also paid $1 \n" +
+    "3. Celebrate in your new found wisdom \n" +
+    "(or charge others 50 cents for your new wisdom 😉)";
 
   return (
     <div>
-        <p className={styles.description} style={{textAlign: "left"}}>
-          {description}
-        </p>
+      <p className={styles.description} style={{ textAlign: "left" }}>
+        {description}
+      </p>
     </div>
-  )
+  );
 }
 
 export default function Home() {
-
-
   return (
     <div className={styles.container}>
       <Head>
@@ -31,12 +29,10 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to my One Dollar Site
-        </h1>
+        <h1 className={styles.title}>Welcome to my One Dollar Site</h1>
 
-        <Description/>
-        <Combined/>
+        <Description />
+        <Combined />
       </main>
 
       {/* TODO: Update this */}
@@ -46,10 +42,10 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
+  );
 }
