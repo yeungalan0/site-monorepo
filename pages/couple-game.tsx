@@ -70,6 +70,35 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function CoupleGame(): JSX.Element {
+  const classes = useStyles();
+
+  return (
+    <Fragment>
+      <Grid container direction="column" className={classes.contentContainer}>
+        <Grid item>
+          <Header />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4" align="center" className={classes.title}>
+            Welcome to the couple game! 💕😘
+          </Typography>
+        </Grid>
+        <Grid item container>
+          <Grid item sm={2} md={4} />
+          <Grid item xs={12} sm={8} md={4}>
+            <Content />
+          </Grid>
+          <Grid item sm={2} md={4} />
+        </Grid>
+      </Grid>
+      <AppBar position="sticky" className={classes.footer}>
+        <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
+      </AppBar>
+    </Fragment>
+  );
+}
+
+function Content() {
   const [players, setPlayers] = useState<string[]>([]);
   const [cardsTodo, setCardsTodo] = useState(-1);
   const [cont, setCont] = useState(false);
@@ -80,9 +109,8 @@ export default function CoupleGame(): JSX.Element {
     const savedPlayersJSON = localStorage.getItem(constants.PLAYERS_KEY);
     const savedIndexes = localStorage.getItem(constants.INDEXES_KEY);
     if (savedPlayersJSON !== null && savedIndexes !== null) {
-      const savedCardsToDo = JSON.parse(savedIndexes).length;
       setPlayers(JSON.parse(savedPlayersJSON));
-      setCardsTodo(savedCardsToDo);
+      setCardsTodo(JSON.parse(savedIndexes).length);
     }
   }, []);
 
@@ -103,58 +131,6 @@ export default function CoupleGame(): JSX.Element {
       event.preventDefault();
     }
   }
-
-  return (
-    <Fragment>
-      <Grid container direction="column" className={classes.contentContainer}>
-        <Grid item>
-          <Header />
-        </Grid>
-        <Grid item>
-          <Typography variant="h4" align="center" className={classes.title}>
-            Welcome to the couple game! 💕😘
-          </Typography>
-        </Grid>
-        <Grid item container>
-          <Grid item sm={2} md={4} />
-          <Grid item xs={12} sm={8} md={4}>
-            <Content
-              handleSubmit={handleSubmit}
-              playerInput={playerInput}
-              players={players}
-              cardsTodo={cardsTodo}
-              cont={cont}
-              setCont={setCont}
-            />
-          </Grid>
-          <Grid item sm={2} md={4} />
-        </Grid>
-      </Grid>
-      <AppBar position="sticky" className={classes.footer}>
-        <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
-      </AppBar>
-    </Fragment>
-  );
-}
-
-type ContentProps = {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  playerInput: React.RefObject<HTMLInputElement>;
-  players: string[];
-  cardsTodo: number;
-  cont: boolean;
-  setCont: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-function Content({
-  handleSubmit,
-  playerInput,
-  players,
-  cardsTodo,
-  cont,
-  setCont,
-}: ContentProps) {
-  const classes = useStyles();
 
   if (players.length > 0 && cont) {
     return <CoupleGameBoard players={players} />;
@@ -214,12 +190,6 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   const [turn, setTurn] = useState(0);
   const [playerStats, setPlayerStats] = useState(() => resetPlayerStats());
 
-  function reset() {
-    resetCards();
-    setPlayerStats(resetPlayerStats());
-    setCard(drawCard());
-  }
-
   function resetPlayerStats() {
     return players.map((player) => new PlayerStat(player, 0));
   }
@@ -262,7 +232,11 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
             pointEarned={pointEarned}
           ></PointButtons>
         </Grid>
-        <ResetButton init={reset}></ResetButton>
+        <ResetButton
+          setPlayerStats={setPlayerStats}
+          resetPlayerStats={resetPlayerStats}
+          setCard={setCard}
+        ></ResetButton>
       </Grid>
     </div>
   );
@@ -307,7 +281,23 @@ function PointButtons({
   );
 }
 
-function ResetButton({ init }: { init: () => void }) {
+type ResetProps = {
+  setPlayerStats: React.Dispatch<React.SetStateAction<PlayerStat[]>>;
+  resetPlayerStats: () => PlayerStat[];
+  setCard: React.Dispatch<React.SetStateAction<GameCard>>;
+};
+
+function ResetButton({
+  setPlayerStats,
+  resetPlayerStats,
+  setCard,
+}: ResetProps) {
+  function reset() {
+    resetCards();
+    setPlayerStats(resetPlayerStats());
+    setCard(drawCard());
+  }
+
   return (
     <Box
       height="18vh"
@@ -317,7 +307,7 @@ function ResetButton({ init }: { init: () => void }) {
       flex="1 0 auto"
     >
       <Grid item>
-        <Button variant="contained" color="secondary" onClick={() => init()}>
+        <Button variant="contained" color="secondary" onClick={() => reset()}>
           Reset
         </Button>
       </Grid>
