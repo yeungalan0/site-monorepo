@@ -137,6 +137,15 @@ export default function CoupleGame(): JSX.Element {
   );
 }
 
+type ContentProps = {
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  playerInput: React.RefObject<HTMLInputElement>;
+  players: string[];
+  cardsTodo: number;
+  cont: boolean;
+  setCont: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 function Content({
   handleSubmit,
   playerInput,
@@ -144,14 +153,7 @@ function Content({
   cardsTodo,
   cont,
   setCont,
-}: {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  playerInput: React.RefObject<HTMLInputElement>;
-  players: string[];
-  cardsTodo: number;
-  cont: boolean;
-  setCont: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}: ContentProps) {
   const classes = useStyles();
 
   if (players.length > 0 && cont) {
@@ -212,7 +214,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
   const [turn, setTurn] = useState(0);
   const [playerStats, setPlayerStats] = useState(() => resetPlayerStats());
 
-  function init() {
+  function reset() {
     resetCards();
     setPlayerStats(resetPlayerStats());
     setCard(drawCard());
@@ -252,65 +254,89 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           justify="center"
           className={classes.cardGrid}
         >
-          <Card variant="outlined" className={classes.gameCard}>
-            <CardContent>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-                className={classes.cardType}
-              >
-                <b>{card.type}</b>
-              </Typography>
-              <Typography>{card.text}</Typography>
-            </CardContent>
-          </Card>
+          <CurrentCard card={card}></CurrentCard>
         </Grid>
         <Grid item justify="center" className={classes.pointButtons}>
-          <Button variant="contained" size="small" onClick={() => nextTurn()}>
-            Incorrect 😓
-          </Button>
-          <Box padding={theme.spacing(0.2)}></Box>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => pointEarned()}
-          >
-            Correct 🙂
-          </Button>
+          <PointButtons
+            nextTurn={nextTurn}
+            pointEarned={pointEarned}
+          ></PointButtons>
         </Grid>
-        <Box
-          height="18vh"
-          display="flex"
-          alignItems="flex-end"
-          justifyContent="center"
-          flex="1 0 auto"
-        >
-          <Grid item>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => init()}
-            >
-              Reset
-            </Button>
-          </Grid>
-        </Box>
+        <ResetButton init={reset}></ResetButton>
       </Grid>
     </div>
   );
 }
 
+function CurrentCard({ card }: { card: GameCard }) {
+  const classes = useStyles();
+
+  return (
+    <Card variant="outlined" className={classes.gameCard}>
+      <CardContent>
+        <Typography
+          color="textSecondary"
+          gutterBottom
+          className={classes.cardType}
+        >
+          <b>{card.type}</b>
+        </Typography>
+        <Typography>{card.text}</Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PointButtons({
+  nextTurn,
+  pointEarned,
+}: {
+  nextTurn: () => void;
+  pointEarned: () => void;
+}) {
+  return (
+    <Fragment>
+      <Button variant="contained" size="small" onClick={() => nextTurn()}>
+        Incorrect 😓
+      </Button>
+      <Box padding={theme.spacing(0.2)}></Box>
+      <Button variant="contained" size="small" onClick={() => pointEarned()}>
+        Correct 🙂
+      </Button>
+    </Fragment>
+  );
+}
+
+function ResetButton({ init }: { init: () => void }) {
+  return (
+    <Box
+      height="18vh"
+      display="flex"
+      alignItems="flex-end"
+      justifyContent="center"
+      flex="1 0 auto"
+    >
+      <Grid item>
+        <Button variant="contained" color="secondary" onClick={() => init()}>
+          Reset
+        </Button>
+      </Grid>
+    </Box>
+  );
+}
+
+type PlayerStatStyleProps = {
+  color: "initial" | "textSecondary";
+  gutterBottom: boolean;
+  variant: "outlined" | undefined;
+  title: string;
+};
+
 function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
   const playerStatCards: JSX.Element[] = [];
 
-  // TODO: Put this type in a central file
   playerStats.forEach((playerStat, index) => {
-    let inputProps: {
-      color: "initial" | "textSecondary";
-      gutterBottom: boolean;
-      variant: "outlined" | undefined;
-      title: string;
-    } = {
+    let inputProps: PlayerStatStyleProps = {
       color: "textSecondary",
       gutterBottom: true,
       variant: undefined,
@@ -326,7 +352,10 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
     }
 
     playerStatCards.push(
-      <PlayerStatCard {...inputProps} playerStat={playerStat}></PlayerStatCard>
+      <PlayerStatCard
+        styleProps={inputProps}
+        playerStat={playerStat}
+      ></PlayerStatCard>
     );
 
     if (index !== playerStats.length - 1) {
@@ -344,26 +373,23 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
 }
 
 function PlayerStatCard({
-  title,
-  variant,
-  color,
-  gutterBottom,
+  styleProps,
   playerStat,
 }: {
-  title: string;
-  variant: "outlined" | undefined;
-  color: "initial" | "textSecondary";
-  gutterBottom: boolean;
+  styleProps: PlayerStatStyleProps;
   playerStat: PlayerStat;
 }) {
   const classes = useStyles();
 
   return (
     <Grid item>
-      <Tooltip title={title}>
-        <Card variant={variant} className={classes.playerStats}>
+      <Tooltip title={styleProps.title}>
+        <Card variant={styleProps.variant} className={classes.playerStats}>
           <CardContent>
-            <Typography color={color} gutterBottom={gutterBottom}>
+            <Typography
+              color={styleProps.color}
+              gutterBottom={styleProps.gutterBottom}
+            >
               <b>{playerStat.name}</b>
             </Typography>
             <Typography>{playerStat.score}</Typography>
@@ -439,7 +465,7 @@ function getRandomIndexAndUpdateStorage(): number {
     return -1;
   }
 
-  const index = getRandomIndex(possibleIndexes.length);
+  const index = Math.floor(Math.random() * possibleIndexes.length);
   const cardsIndex = possibleIndexes[index];
 
   possibleIndexes.splice(index, 1);
@@ -447,8 +473,4 @@ function getRandomIndexAndUpdateStorage(): number {
   localStorage.setItem(constants.INDEXES_KEY, JSON.stringify(possibleIndexes));
 
   return cardsIndex;
-}
-
-function getRandomIndex(length: number): number {
-  return Math.floor(Math.random() * length);
 }
