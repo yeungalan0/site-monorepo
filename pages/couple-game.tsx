@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import * as constants from "../constants/couple-game";
+import * as constants from "../src/couple-game/constants";
 import {
   AppBar,
   Box,
