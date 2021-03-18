@@ -5,7 +5,7 @@ export async function getStaticProps(): Promise<{
     allPostsData: PostData[];
   };
 }> {
-  const allPostsData = getSortedPostsData();
+  const allPostsData = await getSortedPostsData();
   return {
     props: {
       allPostsData,

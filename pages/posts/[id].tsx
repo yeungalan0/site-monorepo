@@ -9,7 +9,7 @@ export async function getStaticProps({
     postData: PostData;
   };
 }> {
-  const postData = getPostData(params.id);
+  const postData = await getPostData(params.id);
   return {
     props: {
       postData,
