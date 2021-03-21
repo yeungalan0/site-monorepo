@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import Header from "../src/header";
+import { Header } from "../src/layout";
 import { makeStyles } from "@material-ui/styles";
 import theme from "../src/theme";
 

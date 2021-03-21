@@ -1,25 +1,11 @@
-import { Grid, Typography } from "@material-ui/core";
-import Header from "../src/header";
+import { Typography } from "@material-ui/core";
+import { DefaultLayout } from "../src/layout";
 
 export default function About(): JSX.Element {
   return (
-    <Grid container direction="column">
-      <Grid item>
-        <Header />
-      </Grid>
-      <Grid item>
-        <Typography variant="h3" align="center">
-          Hello 👋
-        </Typography>
-      </Grid>
-      <Grid item container>
-        <Grid item sm={2} md={3} />
-        <Grid item xs={12} sm={8} md={6}>
-          <Content />
-        </Grid>
-        <Grid item sm={2} md={3} />
-      </Grid>
-    </Grid>
+    <DefaultLayout head={"about"} title={"Hello 👋"}>
+      <Content />
+    </DefaultLayout>
   );
 }
 

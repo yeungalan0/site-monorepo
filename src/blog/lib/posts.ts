@@ -10,7 +10,7 @@ export type PostData = {
   id: string;
   title: string;
   date: string;
-  content: string;
+  contentHtml: string;
 };
 
 export async function getSortedPostsData(): Promise<PostData[]> {
@@ -77,13 +77,13 @@ export async function getPostData(id: string): Promise<PostData> {
   const processedContent = await remark()
     .use(html)
     .process(matterResult.content);
-  const content = processedContent.toString();
+  const contentHtml = processedContent.toString();
 
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
 
   // Combine the data with the id
-  const data: PostData = { id, title, date, content };
+  const data: PostData = { id, title, date, contentHtml };
 
   return data;
 }

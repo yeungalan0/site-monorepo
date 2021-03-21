@@ -1,5 +1,8 @@
-import { Fragment } from "react";
-import { getAllPostIds, getPostData, PostData } from "../../src/lib/posts";
+import { Typography } from "@material-ui/core";
+import Date from "../../src/blog/components/date";
+import { getAllPostIds, getPostData, PostData } from "../../src/blog/lib/posts";
+import { useStyles } from "../../src/blog/styles/posts";
+import { DefaultLayout } from "../../src/layout";
 
 export async function getStaticProps({
   // TODO: Fix this
@@ -38,13 +41,14 @@ export default function Post({
 }: {
   postData: PostData;
 }): JSX.Element {
+  const classes = useStyles();
+
   return (
-    <Fragment>
-      {postData.title}
-      <br />
-      {postData.id}
-      <br />
-      {postData.date}
-    </Fragment>
+    <DefaultLayout head={postData.title} title={postData.title}>
+      <Typography align="center" color="textSecondary" className={classes.date}>
+        <Date dateString={postData.date} />
+      </Typography>
+      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+    </DefaultLayout>
   );
 }

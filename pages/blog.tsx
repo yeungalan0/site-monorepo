@@ -1,4 +1,6 @@
-import { getSortedPostsData, PostData } from "../src/lib/posts";
+import { Link, Typography } from "@material-ui/core";
+import Date from "../src/blog/components/date";
+import { getSortedPostsData, PostData } from "../src/blog/lib/posts";
 
 export async function getStaticProps(): Promise<{
   props: {
@@ -23,12 +25,16 @@ export default function Blog({
       <h2>Blog</h2>
       <ul>
         {allPostsData.map(({ id, date, title }) => (
-          <li key={id}>
-            {title}
+          <li key={id} style={{ listStyleType: "none" }}>
+            <Link href={`/posts/${id}`}>
+              <a>{title}</a>
+            </Link>
             <br />
-            {id}
-            <br />
-            {date}
+            <small>
+              <Typography color="textSecondary">
+                <Date dateString={date} />
+              </Typography>
+            </small>
           </li>
         ))}
       </ul>
