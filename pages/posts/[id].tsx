@@ -4,9 +4,14 @@ import { getAllPostIds, getPostData, PostData } from "../../src/blog/lib/posts";
 import { useStyles } from "../../src/blog/styles/posts";
 import { DefaultLayout } from "../../src/layout";
 
+type postParam = {
+  id: string;
+};
+
 export async function getStaticProps({
-  // TODO: Fix this
   params,
+}: {
+  params: postParam;
 }): Promise<{
   props: {
     postData: PostData;

@@ -115,7 +115,6 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
   );
 }
 
-// TODO: Make topics change on hover
 export function Header(): JSX.Element {
   const classes = useStyles();
   return (
@@ -123,7 +122,7 @@ export function Header(): JSX.Element {
       <DefaultLayout renderHeader={false}>
         <Toolbar>
           <Typography
-            color="textPrimary"
+            color="textSecondary"
             variant="h6"
             className={classes.topic}
           >
@@ -132,7 +131,7 @@ export function Header(): JSX.Element {
             </Link>
           </Typography>
           <Typography
-            color="textPrimary"
+            color="textSecondary"
             variant="h6"
             className={classes.topic}
           >
@@ -141,7 +140,7 @@ export function Header(): JSX.Element {
             </Link>
           </Typography>
           <Typography
-            color="textPrimary"
+            color="textSecondary"
             variant="h6"
             className={classes.topic}
           >
@@ -150,7 +149,7 @@ export function Header(): JSX.Element {
             </Link>
           </Typography>
           <Typography
-            color="textPrimary"
+            color="textSecondary"
             variant="h6"
             className={classes.topic}
           >
