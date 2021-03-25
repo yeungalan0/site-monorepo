@@ -12,14 +12,16 @@ type DefaultLayoutProps = {
   sm?: GridSize | false;
   md?: GridSize | false;
   lg?: GridSize | false;
+  xl?: GridSize | false;
   renderHeader?: boolean;
 };
 
 function getEdgeSizes(
   contentSize: GridSize | false
 ): { leftEdge: GridSize | false; rightEdge: GridSize | false } {
-  let leftEdge: GridSize | false = ((12 - (contentSize as number)) /
-    2) as GridSize;
+  let leftEdge: GridSize | false = Math.floor(
+    (12 - (contentSize as number)) / 2
+  ) as GridSize;
   let rightEdge: GridSize | false = (12 -
     (contentSize as number) -
     (leftEdge as number)) as GridSize;
@@ -38,12 +40,14 @@ export function DefaultLayout({
   sm = 8,
   md = 6,
   lg = 4,
+  xl = 4,
   renderHeader = true,
 }: DefaultLayoutProps): JSX.Element {
   const { leftEdge: xsLeftEdge, rightEdge: xsRightEdge } = getEdgeSizes(xs);
   const { leftEdge: smLeftEdge, rightEdge: smRightEdge } = getEdgeSizes(sm);
   const { leftEdge: mdLeftEdge, rightEdge: mdRightEdge } = getEdgeSizes(md);
   const { leftEdge: lgLeftEdge, rightEdge: lgRightEdge } = getEdgeSizes(lg);
+  const { leftEdge: xlLeftEdge, rightEdge: xlRightEdge } = getEdgeSizes(xl);
 
   return (
     <Fragment>
@@ -58,8 +62,9 @@ export function DefaultLayout({
             sm={smLeftEdge}
             md={mdLeftEdge}
             lg={lgLeftEdge}
+            xl={xlLeftEdge}
           />
-          <Grid item xs={xs} sm={sm} md={md} lg={lg}>
+          <Grid item xs={xs} sm={sm} md={md} lg={lg} xl={xl}>
             {children}
           </Grid>
           <Grid
@@ -68,6 +73,7 @@ export function DefaultLayout({
             sm={smRightEdge}
             md={mdRightEdge}
             lg={lgRightEdge}
+            xl={xlRightEdge}
           />
         </Grid>
       </Grid>

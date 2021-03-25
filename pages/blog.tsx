@@ -1,13 +1,15 @@
 import { Link, Typography } from "@material-ui/core";
+import useSWR from "swr";
 import Date from "../src/blog/components/date";
-import { getSortedPostsData, PostData } from "../src/blog/lib/posts";
+import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
+import { DefaultLayout } from "../src/layout";
 
 export async function getStaticProps(): Promise<{
   props: {
     allPostsData: PostData[];
   };
 }> {
-  const allPostsData = await getSortedPostsData();
+  const allPostsData = await getSortedPostsSummaryData();
   return {
     props: {
       allPostsData,
@@ -15,14 +17,16 @@ export async function getStaticProps(): Promise<{
   };
 }
 
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+// TODO: Eventually pagination will become useful here
 export default function Blog({
   allPostsData,
 }: {
   allPostsData: PostData[];
 }): JSX.Element {
   return (
-    <section>
-      <h2>Blog</h2>
+    <DefaultLayout head="blog" title="Posts">
       <ul>
         {allPostsData.map(({ id, date, title }) => (
           <li key={id} style={{ listStyleType: "none" }}>
@@ -38,6 +42,15 @@ export default function Blog({
           </li>
         ))}
       </ul>
-    </section>
+      <Posts />
+    </DefaultLayout>
   );
+}
+
+function Posts(): JSX.Element {
+  const { data, error } = useSWR("/api/post-summary-data", fetcher);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+  return <div>hello {JSON.stringify(data)}!</div>;
 }
