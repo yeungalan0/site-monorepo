@@ -11,6 +11,7 @@ export type PostData = {
   id: string;
   title: string;
   date: string;
+  tags: string[];
   contentHtml: string;
 };
 
@@ -19,7 +20,6 @@ export async function getSortedPostsSummaryData(): Promise<PostData[]> {
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsDataPromises: Promise<PostData>[] = fileNames.map(
     (fileName) => {
-      // Remove ".md" from file name to get id
       const id = fileName.replace(/\.md$/, "");
 
       return getPostData(id).then((postData) => {
@@ -93,9 +93,11 @@ export async function getPostData(id: string): Promise<PostData> {
 
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
+  // TODO: Validate tags
+  const tags: string[] = matterResult.data.tags;
 
   // Combine the data with the id
-  const data: PostData = { id, title, date, contentHtml };
+  const data: PostData = { id, title, date, tags, contentHtml };
 
   return data;
 }

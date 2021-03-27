@@ -1,7 +1,7 @@
 import { Link, Typography } from "@material-ui/core";
 import useSWR from "swr";
 import Date from "../src/blog/components/date";
-import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
+import { PostData } from "../src/blog/lib/posts";
 import { DefaultLayout } from "../src/layout";
 
 export async function getStaticProps(): Promise<{
@@ -9,7 +9,9 @@ export async function getStaticProps(): Promise<{
     allPostsData: PostData[];
   };
 }> {
-  const allPostsData = await getSortedPostsSummaryData();
+  const res = await fetch("http://localhost:3000/api/post-summary-data");
+  const allPostsData: PostData[] = await res.json();
+
   return {
     props: {
       allPostsData,
@@ -28,7 +30,7 @@ export default function Blog({
   return (
     <DefaultLayout head="blog" title="Posts">
       <ul>
-        {allPostsData.map(({ id, date, title }) => (
+        {allPostsData.map(({ id, date, title, tags }) => (
           <li key={id} style={{ listStyleType: "none" }}>
             <Link href={`/posts/${id}`}>
               <a>{title}</a>
@@ -38,11 +40,11 @@ export default function Blog({
               <Typography color="textSecondary">
                 <Date dateString={date} />
               </Typography>
+              <Typography color="textPrimary">Tags: {tags}</Typography>
             </small>
           </li>
         ))}
       </ul>
-      <Posts />
     </DefaultLayout>
   );
 }
