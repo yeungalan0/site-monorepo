@@ -3,6 +3,10 @@ import path from "path";
 import matter from "gray-matter";
 import remark from "remark";
 import html from "remark-html";
+import { VALID_TAGS } from "../constants";
+import headings from "remark-autolink-headings";
+import slug from "remark-slug";
+import { FilterKeys, QueryParams } from "../../../pages/api/post-summary-data";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const charLimit = 400;
@@ -15,7 +19,9 @@ export type PostData = {
   contentHtml: string;
 };
 
-export async function getSortedPostsSummaryData(): Promise<PostData[]> {
+export async function getSortedPostsSummaryData(
+  queryParams: QueryParams
+): Promise<PostData[]> {
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsDataPromises: Promise<PostData>[] = fileNames.map(
@@ -29,7 +35,8 @@ export async function getSortedPostsSummaryData(): Promise<PostData[]> {
     }
   );
 
-  const allPostsData: PostData[] = await Promise.all(allPostsDataPromises);
+  let allPostsData: PostData[] = await Promise.all(allPostsDataPromises);
+  allPostsData = applyFilters(allPostsData, queryParams);
 
   // Sort posts by date
   return allPostsData.sort((a, b) => {
@@ -38,6 +45,23 @@ export async function getSortedPostsSummaryData(): Promise<PostData[]> {
     } else {
       return -1;
     }
+  });
+}
+
+function applyFilters(
+  allPostsData: PostData[],
+  queryParams: QueryParams
+): PostData[] {
+  return allPostsData.filter((postData) => {
+    let meetsFilterCriteria = true;
+    if (FilterKeys.TAGS in queryParams) {
+      const containsFilterTags = queryParams[FilterKeys.TAGS].every((tag) =>
+        postData.tags.includes(tag)
+      );
+      meetsFilterCriteria = containsFilterTags;
+    }
+
+    return meetsFilterCriteria;
   });
 }
 
@@ -87,17 +111,27 @@ export async function getPostData(id: string): Promise<PostData> {
 
   // Use remark to convert markdown into HTML string
   const processedContent = await remark()
+    .use(slug)
+    .use(headings, { behavior: "wrap" })
     .use(html)
     .process(matterResult.content);
   const contentHtml = processedContent.toString();
 
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
-  // TODO: Validate tags
   const tags: string[] = matterResult.data.tags;
+  validateTags(tags);
 
   // Combine the data with the id
   const data: PostData = { id, title, date, tags, contentHtml };
 
   return data;
+}
+
+function validateTags(tags: string[]) {
+  tags.forEach((tag) => {
+    if (!VALID_TAGS.includes(tag)) {
+      throw Error("invalid tag!");
+    }
+  });
 }

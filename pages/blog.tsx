@@ -1,5 +1,4 @@
 import { Link, Typography } from "@material-ui/core";
-import useSWR from "swr";
 import Date from "../src/blog/components/date";
 import { PostData } from "../src/blog/lib/posts";
 import { DefaultLayout } from "../src/layout";
@@ -18,8 +17,6 @@ export async function getStaticProps(): Promise<{
     },
   };
 }
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 // TODO: Eventually pagination will become useful here
 export default function Blog({
@@ -40,19 +37,13 @@ export default function Blog({
               <Typography color="textSecondary">
                 <Date dateString={date} />
               </Typography>
-              <Typography color="textPrimary">Tags: {tags}</Typography>
+              <Typography color="textPrimary">
+                Tags: {tags.join(", ")}
+              </Typography>
             </small>
           </li>
         ))}
       </ul>
     </DefaultLayout>
   );
-}
-
-function Posts(): JSX.Element {
-  const { data, error } = useSWR("/api/post-summary-data", fetcher);
-
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
-  return <div>hello {JSON.stringify(data)}!</div>;
 }
