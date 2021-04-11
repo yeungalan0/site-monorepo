@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import remark from "remark";
 import html from "remark-html";
 import { VALID_TAGS } from "../constants";
+// @ts-ignore
 import headings from "remark-autolink-headings";
+// @ts-ignore
 import slug from "remark-slug";
 import { FilterKeys, QueryParams } from "../../../pages/api/post-summary-data";
 
@@ -65,7 +68,7 @@ function applyFilters(
   });
 }
 
-function getSnippet(text: string, charLimit: number) {
+function getSnippet(text: string, charLimit: number): string {
   if (text.length > charLimit) {
     const i = text.indexOf(" ", charLimit);
     return text.substring(0, i) + "...";
@@ -135,3 +138,8 @@ function validateTags(tags: string[]) {
     }
   });
 }
+
+export const testables = {
+  applyFilters: applyFilters,
+  getSnippet: getSnippet,
+};

@@ -1,7 +1,7 @@
 import { Typography } from "@material-ui/core";
 import Date from "../../src/blog/components/date";
 import { getAllPostIds, getPostData, PostData } from "../../src/blog/lib/posts";
-import { useStyles } from "../../src/blog/styles/posts";
+import { postStyles } from "../../src/blog/styles/styles";
 import { DefaultLayout } from "../../src/layout";
 
 type postParam = {
@@ -46,7 +46,7 @@ export default function Post({
 }: {
   postData: PostData;
 }): JSX.Element {
-  const classes = useStyles();
+  const classes = postStyles();
 
   return (
     <DefaultLayout head={postData.title} title={postData.title}>

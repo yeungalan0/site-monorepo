@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "debug": "NODE_OPTIONS='--inspect' next dev"
+    "debug": "NODE_OPTIONS='--inspect' next dev",
+    "test": "jest"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -27,6 +28,7 @@
     "webpack": "^4.44.2"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "@types/node": "^14.14.27",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
@@ -38,9 +40,10 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^5.0.9",
+    "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "prettier": "2.2.1",
-    "typescript": "^4.1.5"
+    "ts-jest": "^26.5.4"
   },
   "husky": {
     "hooks": {

@@ -19,5 +19,8 @@
   },
   "globals": {
     "React": "writable"
+  },
+  "env": {
+    "jest/globals": true
   }
 }
