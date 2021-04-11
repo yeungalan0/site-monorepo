@@ -91,7 +91,7 @@ export default function Blog({
         {postData.map(({ id, date, title, tags }) => (
           <li key={id} style={{ listStyleType: "none" }}>
             <Link href={`/posts/${id}`}>
-              <a>{title}</a>
+              {title}
             </Link>
             <br />
             <small>
