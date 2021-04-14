@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { VALID_TAGS } from "../src/blog/constants";
-import { PostData } from "../src/blog/lib/posts";
+import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
 import { blogStyles } from "../src/blog/styles/styles";
 import { DefaultLayout } from "../src/layout";
 import useSWR from "swr";
@@ -28,8 +28,7 @@ export async function getStaticProps(): Promise<{
     allPostsData: PostData[];
   };
 }> {
-  const res = await fetch("http://localhost:3000/api/post-summary-data");
-  const allPostsData: PostData[] = await res.json();
+  const allPostsData = await getSortedPostsSummaryData({})
 
   return {
     props: {
