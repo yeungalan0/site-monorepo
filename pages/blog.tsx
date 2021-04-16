@@ -5,7 +5,6 @@ import {
   Checkbox,
   FormControl,
   Grid,
-  GridListTile,
   Input,
   InputLabel,
   Link,
@@ -28,7 +27,7 @@ export async function getStaticProps(): Promise<{
     allPostsData: PostData[];
   };
 }> {
-  const allPostsData = await getSortedPostsSummaryData({})
+  const allPostsData = await getSortedPostsSummaryData({});
 
   return {
     props: {
@@ -97,9 +96,7 @@ function PostCard({
       <Card variant="outlined">
         <CardActionArea>
           <Box margin={theme.spacing(0.5)} textAlign="center">
-            <Typography>
-              <Link href={`/posts/${id}`}>{title}</Link>
-            </Typography>
+            <Typography variant="h6">{title}</Typography>
             <small>
               <br />
               <Typography color="textSecondary">

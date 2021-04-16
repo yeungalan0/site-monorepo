@@ -1,4 +1,4 @@
-import { AppBar, Grid, Toolbar, GridSize, Typography } from "@material-ui/core";
+import { AppBar, Grid, Toolbar, GridSize, Typography, useTheme } from "@material-ui/core";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment } from "react";
@@ -123,6 +123,15 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
 
 export function Header(): JSX.Element {
   const classes = useStyles();
+  const theme = useTheme();
+  // const [darkMode, setDarkMode] = useState(true);
+  // console.log("THEME: "+theme.palette.type)
+
+  // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   console.log(`RUNNING ${theme.palette.type}`)
+  //   theme.palette.type = theme.palette.type === "dark" ? "light" : "dark"
+  // };
+
   return (
     <AppBar position="static">
       <DefaultLayout renderHeader={false}>
@@ -163,6 +172,10 @@ export function Header(): JSX.Element {
               <a>Resume</a>
             </Link>
           </Typography>
+          {/* <Switch
+            checked={theme.palette.type == "dark"}
+            onChange={handleChange}
+          /> */}
         </Toolbar>
       </DefaultLayout>
     </AppBar>

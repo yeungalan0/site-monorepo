@@ -1,5 +1,8 @@
+import { ThemeProvider } from "@material-ui/styles";
 import { useEffect } from "react";
 import "../styles/globals.css";
+import theme from "../src/theme";
+import { CssBaseline } from "@material-ui/core";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -9,7 +12,12 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
 }
 
 export default MyApp;
