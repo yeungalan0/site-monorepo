@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import theme from "../../theme";
+import { darkTheme as theme } from "../../theme";
 
 const postStyles = makeStyles(() => ({
   date: {

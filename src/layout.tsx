@@ -1,19 +1,40 @@
-import { AppBar, Grid, Toolbar, GridSize, Typography, useTheme } from "@material-ui/core";
+import {
+  AppBar,
+  Grid,
+  Toolbar,
+  GridSize,
+  Typography,
+  ThemeProvider,
+  CssBaseline,
+  Switch,
+} from "@material-ui/core";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useStyles } from "./style";
+import { darkTheme, lightTheme } from "./theme";
 
 type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
   head?: string | null;
   title?: string | null;
-  xs?: GridSize | false;
-  sm?: GridSize | false;
-  md?: GridSize | false;
-  lg?: GridSize | false;
-  xl?: GridSize | false;
   renderHeader?: boolean;
+  gridSizes?: CustomGridSizes;
+};
+
+type DefaultGridLayoutProps = {
+  children: JSX.Element | JSX.Element[];
+  header?: JSX.Element | null;
+  title?: JSX.Element | null;
+  gridSizes?: CustomGridSizes;
+};
+
+type CustomGridSizes = {
+  xs: GridSize | false;
+  sm: GridSize | false;
+  md: GridSize | false;
+  lg: GridSize | false;
+  xl: GridSize | false;
 };
 
 function getEdgeSizes(
@@ -32,63 +53,116 @@ function getEdgeSizes(
   return { leftEdge, rightEdge };
 }
 
+export function DefaultGridLayout({
+  children,
+  header = null,
+  title = null,
+  gridSizes = {
+    xs: 12,
+    sm: 8,
+    md: 6,
+    lg: 4,
+    xl: 4,
+  },
+}: DefaultGridLayoutProps): JSX.Element {
+  const { leftEdge: xsLeftEdge, rightEdge: xsRightEdge } = getEdgeSizes(
+    gridSizes.xs
+  );
+  const { leftEdge: smLeftEdge, rightEdge: smRightEdge } = getEdgeSizes(
+    gridSizes.sm
+  );
+  const { leftEdge: mdLeftEdge, rightEdge: mdRightEdge } = getEdgeSizes(
+    gridSizes.md
+  );
+  const { leftEdge: lgLeftEdge, rightEdge: lgRightEdge } = getEdgeSizes(
+    gridSizes.lg
+  );
+  const { leftEdge: xlLeftEdge, rightEdge: xlRightEdge } = getEdgeSizes(
+    gridSizes.xl
+  );
+
+  return (
+    <Grid container direction="column">
+      {header}
+      {title}
+      <Grid item container>
+        <Grid
+          item
+          xs={xsLeftEdge}
+          sm={smLeftEdge}
+          md={mdLeftEdge}
+          lg={lgLeftEdge}
+          xl={xlLeftEdge}
+        />
+        <Grid
+          item
+          xs={gridSizes.xs}
+          sm={gridSizes.sm}
+          md={gridSizes.md}
+          lg={gridSizes.lg}
+          xl={gridSizes.xl}
+        >
+          {children}
+        </Grid>
+        <Grid
+          item
+          xs={xsRightEdge}
+          sm={smRightEdge}
+          md={mdRightEdge}
+          lg={lgRightEdge}
+          xl={xlRightEdge}
+        />
+      </Grid>
+    </Grid>
+  );
+}
+
 export function DefaultLayout({
   children,
   head = null,
   title = null,
-  xs = 12,
-  sm = 8,
-  md = 6,
-  lg = 4,
-  xl = 4,
   renderHeader = true,
+  gridSizes = undefined,
 }: DefaultLayoutProps): JSX.Element {
-  const { leftEdge: xsLeftEdge, rightEdge: xsRightEdge } = getEdgeSizes(xs);
-  const { leftEdge: smLeftEdge, rightEdge: smRightEdge } = getEdgeSizes(sm);
-  const { leftEdge: mdLeftEdge, rightEdge: mdRightEdge } = getEdgeSizes(md);
-  const { leftEdge: lgLeftEdge, rightEdge: lgRightEdge } = getEdgeSizes(lg);
-  const { leftEdge: xlLeftEdge, rightEdge: xlRightEdge } = getEdgeSizes(xl);
+  const [darkThemeActive, setDarkTheme] = useState(true);
 
   return (
-    <Fragment>
+    <ThemeProvider theme={darkThemeActive ? darkTheme : lightTheme}>
+      <CssBaseline />
       <ConditionalHead head={head} />
-      <Grid container direction="column">
-        <ConditionalHeader renderHeader={renderHeader} />
-        <ConditionalTitle title={title} />
-        <Grid item container>
-          <Grid
-            item
-            xs={xsLeftEdge}
-            sm={smLeftEdge}
-            md={mdLeftEdge}
-            lg={lgLeftEdge}
-            xl={xlLeftEdge}
-          />
-          <Grid item xs={xs} sm={sm} md={md} lg={lg} xl={xl}>
-            {children}
-          </Grid>
-          <Grid
-            item
-            xs={xsRightEdge}
-            sm={smRightEdge}
-            md={mdRightEdge}
-            lg={lgRightEdge}
-            xl={xlRightEdge}
-          />
-        </Grid>
-      </Grid>
-    </Fragment>
+      <DefaultGridLayout
+        header={
+          <ConditionalHeader
+            renderHeader={renderHeader}
+            darkThemeActive={darkThemeActive}
+            setDarkTheme={setDarkTheme}
+          ></ConditionalHeader>
+        }
+        title={<ConditionalTitle title={title}></ConditionalTitle>}
+        gridSizes={gridSizes}
+      >
+        {children}
+      </DefaultGridLayout>
+    </ThemeProvider>
   );
 }
 
-function ConditionalHeader({ renderHeader }: { renderHeader: boolean }) {
+function ConditionalHeader({
+  renderHeader,
+  darkThemeActive,
+  setDarkTheme,
+}: {
+  renderHeader: boolean;
+  darkThemeActive: boolean;
+  setDarkTheme: Dispatch<SetStateAction<boolean>>;
+}) {
   if (!renderHeader) {
     return <></>;
   }
 
   return (
     <Grid item>
-      <Header />
+      <Header darkThemeActive={darkThemeActive} setDarkTheme={setDarkTheme} />
     </Grid>
   );
 }
@@ -121,20 +195,18 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
   );
 }
 
-export function Header(): JSX.Element {
+export function Header({
+  darkThemeActive,
+  setDarkTheme,
+}: {
+  darkThemeActive: boolean;
+  setDarkTheme: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element {
   const classes = useStyles();
-  const theme = useTheme();
-  // const [darkMode, setDarkMode] = useState(true);
-  // console.log("THEME: "+theme.palette.type)
-
-  // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //   console.log(`RUNNING ${theme.palette.type}`)
-  //   theme.palette.type = theme.palette.type === "dark" ? "light" : "dark"
-  // };
 
   return (
     <AppBar position="static">
-      <DefaultLayout renderHeader={false}>
+      <DefaultGridLayout>
         <Toolbar>
           <Typography
             color="textSecondary"
@@ -172,12 +244,12 @@ export function Header(): JSX.Element {
               <a>Resume</a>
             </Link>
           </Typography>
-          {/* <Switch
-            checked={theme.palette.type == "dark"}
-            onChange={handleChange}
-          /> */}
+          <Switch
+            checked={darkThemeActive}
+            onChange={() => setDarkTheme(!darkThemeActive)}
+          />
         </Toolbar>
-      </DefaultLayout>
+      </DefaultGridLayout>
     </AppBar>
   );
 }

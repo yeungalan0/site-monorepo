@@ -12,6 +12,7 @@ import {
   MenuItem,
   Select,
   Typography,
+  useTheme,
 } from "@material-ui/core";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { VALID_TAGS } from "../src/blog/constants";
@@ -20,7 +21,6 @@ import { blogStyles } from "../src/blog/styles/styles";
 import { DefaultLayout } from "../src/layout";
 import useSWR from "swr";
 import Date from "../src/blog/components/date";
-import theme from "../src/theme";
 
 export async function getStaticProps(): Promise<{
   props: {
@@ -91,6 +91,8 @@ function PostCard({
   date: string;
   tags: string[];
 }): JSX.Element {
+  const theme = useTheme()
+
   return (
     <Link href={`/posts/${id}`}>
       <Card variant="outlined">

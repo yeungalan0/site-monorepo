@@ -14,7 +14,7 @@ import {
 
 import { Header } from "../src/layout";
 import { makeStyles } from "@material-ui/styles";
-import theme from "../src/theme";
+import { darkTheme as theme } from "../src/theme";
 
 // style={{ border: "solid 1px", backgroundColor: "orange" }}
 
@@ -72,6 +72,7 @@ const useStyles = makeStyles(() => ({
 export default function CoupleGame(): JSX.Element {
   const classes = useStyles();
 
+  // TODO: use default layout here
   return (
     <Fragment>
       <Grid container direction="column" className={classes.contentContainer}>
