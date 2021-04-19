@@ -4,15 +4,17 @@ import {
   Toolbar,
   GridSize,
   Typography,
-  ThemeProvider,
-  CssBaseline,
+  Tooltip,
   Switch,
+  useTheme,
 } from "@material-ui/core";
 import Head from "next/head";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Fragment, useContext } from "react";
 import { useStyles } from "./style";
-import { darkTheme, lightTheme } from "./theme";
+import { ToggleThemeContext } from "./theme-provider";
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 
 type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
@@ -124,45 +126,30 @@ export function DefaultLayout({
   renderHeader = true,
   gridSizes = undefined,
 }: DefaultLayoutProps): JSX.Element {
-  const [darkThemeActive, setDarkTheme] = useState(true);
-
   return (
-    <ThemeProvider theme={darkThemeActive ? darkTheme : lightTheme}>
-      <CssBaseline />
+    <Fragment>
       <ConditionalHead head={head} />
       <DefaultGridLayout
         header={
-          <ConditionalHeader
-            renderHeader={renderHeader}
-            darkThemeActive={darkThemeActive}
-            setDarkTheme={setDarkTheme}
-          ></ConditionalHeader>
+          <ConditionalHeader renderHeader={renderHeader}></ConditionalHeader>
         }
         title={<ConditionalTitle title={title}></ConditionalTitle>}
         gridSizes={gridSizes}
       >
         {children}
       </DefaultGridLayout>
-    </ThemeProvider>
+    </Fragment>
   );
 }
 
-function ConditionalHeader({
-  renderHeader,
-  darkThemeActive,
-  setDarkTheme,
-}: {
-  renderHeader: boolean;
-  darkThemeActive: boolean;
-  setDarkTheme: Dispatch<SetStateAction<boolean>>;
-}) {
+function ConditionalHeader({ renderHeader }: { renderHeader: boolean }) {
   if (!renderHeader) {
     return <></>;
   }
 
   return (
     <Grid item>
-      <Header darkThemeActive={darkThemeActive} setDarkTheme={setDarkTheme} />
+      <Header />
     </Grid>
   );
 }
@@ -195,14 +182,10 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
   );
 }
 
-export function Header({
-  darkThemeActive,
-  setDarkTheme,
-}: {
-  darkThemeActive: boolean;
-  setDarkTheme: Dispatch<SetStateAction<boolean>>;
-}): JSX.Element {
+// TODO: make disappear on downward scroll
+export function Header(): JSX.Element {
   const classes = useStyles();
+  const { toggleTheme, darkThemeActive } = useContext(ToggleThemeContext);
 
   return (
     <AppBar position="static">
@@ -244,10 +227,15 @@ export function Header({
               <a>Resume</a>
             </Link>
           </Typography>
-          <Switch
-            checked={darkThemeActive}
-            onChange={() => setDarkTheme(!darkThemeActive)}
-          />
+          <Tooltip title="Toggle Theme"> 
+            <Switch
+              checked={darkThemeActive}
+              onChange={toggleTheme}
+              icon={<WbSunnyIcon fontSize="small" />}
+              checkedIcon={<Brightness2Icon fontSize="small" />}
+              color="default"
+            />
+          </Tooltip>
         </Toolbar>
       </DefaultGridLayout>
     </AppBar>
