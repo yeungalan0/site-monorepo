@@ -12,7 +12,6 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import { Header } from "../src/layout";
 import { makeStyles } from "@material-ui/styles";
 import { darkTheme as theme } from "../src/theme";
 
@@ -76,9 +75,6 @@ export default function CoupleGame(): JSX.Element {
   return (
     <Fragment>
       <Grid container direction="column" className={classes.contentContainer}>
-        <Grid item>
-          <Header />
-        </Grid>
         <Grid item>
           <Typography variant="h4" align="center" className={classes.title}>
             Welcome to the couple game! 💕😘
@@ -220,6 +216,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           Card: {cardsTodo}/{allCards}
         </Grid>
         <Grid
+          container
           item
           alignItems="center"
           justify="center"
@@ -227,7 +224,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
         >
           <CurrentCard card={card}></CurrentCard>
         </Grid>
-        <Grid item justify="center" className={classes.pointButtons}>
+        <Grid container item justify="center" className={classes.pointButtons}>
           <PointButtons
             nextTurn={nextTurn}
             pointEarned={pointEarned}
@@ -346,12 +343,13 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
       <PlayerStatCard
         styleProps={inputProps}
         playerStat={playerStat}
+        key={playerStatCards.length}
       ></PlayerStatCard>
     );
 
     if (index !== playerStats.length - 1) {
       playerStatCards.push(
-        <Grid item>
+        <Grid item key={playerStatCards.length}>
           <Box display="flex" alignItems="center" height="100%">
             ❤️
           </Box>

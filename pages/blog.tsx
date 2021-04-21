@@ -36,20 +36,17 @@ export async function getStaticProps(): Promise<{
   };
 }
 
-// TODO: Eventually pagination will become useful here
 export default function Blog({
   allPostsData,
 }: {
   allPostsData: PostData[];
 }): JSX.Element {
-  const classes = blogStyles();
   const [postData, setPostData] = useState<PostData[]>(allPostsData);
   const [tags, setTags] = useState<string[]>([]);
   const isFirstRender = useRef(true);
 
   const fetcher = (url: string) => fetch(url).then((r) => r.json());
   const shouldFetch = !isFirstRender.current;
-  // TODO: Globally configured SWR
   const { data, error } = useSWR<PostData[], Error>(
     () =>
       shouldFetch ? `/api/post-summary-data?${buildTagsQuery(tags)}` : null,
@@ -91,7 +88,7 @@ function PostCard({
   date: string;
   tags: string[];
 }): JSX.Element {
-  const theme = useTheme()
+  const theme = useTheme();
 
   return (
     <Link href={`/posts/${id}`}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/globals.css";
 import CustomThemeProvider from "../src/theme-provider";
 import { AppProps } from "next/dist/next-server/lib/router/router";
+import { TopBar } from "../src/layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [style, setStyle] = useState<React.CSSProperties>({
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     // style needed otherwise site might "flash" with different theme settings
     <div style={style}>
       <CustomThemeProvider>
+        <TopBar />
         <Component {...pageProps} />
       </CustomThemeProvider>
     </div>

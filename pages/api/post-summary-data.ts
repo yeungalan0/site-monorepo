@@ -16,9 +16,8 @@ export type QueryParams = {
   [key: string]: string[];
 };
 
-// TODO: write tests
 const querySchema: schema = {
-  tags: (value: string[]) => {
+  [FilterKeys.TAGS]: (value: string[]) => {
     const isValidTag = (tag: string) => VALID_TAGS.includes(tag);
     return value.every(isValidTag);
   },
@@ -64,3 +63,8 @@ function getQueryParams(query: NextApiRequest["query"]): QueryParams {
 
   return queryParams;
 }
+
+export const testables = {
+  querySchema: querySchema,
+  validate: validate,
+};

@@ -20,13 +20,11 @@ type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
   head?: string | null;
   title?: string | null;
-  renderHeader?: boolean;
   gridSizes?: CustomGridSizes;
 };
 
 type DefaultGridLayoutProps = {
   children: JSX.Element | JSX.Element[];
-  header?: JSX.Element | null;
   title?: JSX.Element | null;
   gridSizes?: CustomGridSizes;
 };
@@ -57,7 +55,6 @@ function getEdgeSizes(
 
 export function DefaultGridLayout({
   children,
-  header = null,
   title = null,
   gridSizes = {
     xs: 12,
@@ -85,7 +82,6 @@ export function DefaultGridLayout({
 
   return (
     <Grid container direction="column">
-      {header}
       {title}
       <Grid item container>
         <Grid
@@ -123,34 +119,18 @@ export function DefaultLayout({
   children,
   head = null,
   title = null,
-  renderHeader = true,
   gridSizes = undefined,
 }: DefaultLayoutProps): JSX.Element {
   return (
     <Fragment>
       <ConditionalHead head={head} />
       <DefaultGridLayout
-        header={
-          <ConditionalHeader renderHeader={renderHeader}></ConditionalHeader>
-        }
         title={<ConditionalTitle title={title}></ConditionalTitle>}
         gridSizes={gridSizes}
       >
         {children}
       </DefaultGridLayout>
     </Fragment>
-  );
-}
-
-function ConditionalHeader({ renderHeader }: { renderHeader: boolean }) {
-  if (!renderHeader) {
-    return <></>;
-  }
-
-  return (
-    <Grid item>
-      <Header />
-    </Grid>
   );
 }
 
@@ -183,7 +163,7 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
 }
 
 // TODO: make disappear on downward scroll
-export function Header(): JSX.Element {
+export function TopBar(): JSX.Element {
   const classes = useStyles();
   const { toggleTheme, darkThemeActive } = useContext(ToggleThemeContext);
 
