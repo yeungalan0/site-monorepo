@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
+import path from "path";
 import remark from "remark";
-import html from "remark-html";
-import { VALID_TAGS } from "../constants";
 // @ts-ignore
 import headings from "remark-autolink-headings";
+import html from "remark-html";
 // @ts-ignore
 import slug from "remark-slug";
 import { FilterKeys, QueryParams } from "../../../pages/api/post-summary-data";
+import { VALID_TAGS } from "../constants";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 const charLimit = 400;
@@ -19,6 +19,7 @@ export type PostData = {
   title: string;
   date: string;
   tags: string[];
+  link: string | null;
   contentHtml: string;
 };
 
@@ -123,10 +124,12 @@ export async function getPostData(id: string): Promise<PostData> {
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
   const tags: string[] = matterResult.data.tags;
+  const link: string | null = matterResult.data.link ?? null;
   validateTags(tags);
+  validateLink(link);
 
   // Combine the data with the id
-  const data: PostData = { id, title, date, tags, contentHtml };
+  const data: PostData = { id, title, date, tags, link, contentHtml };
 
   return data;
 }
@@ -137,6 +140,13 @@ function validateTags(tags: string[]) {
       throw Error("invalid tag!");
     }
   });
+}
+
+// TODO
+function validateLink(link: string | null) {
+  if (link === null || link.startsWith("http")) {
+    return;
+  }
 }
 
 export const testables = {

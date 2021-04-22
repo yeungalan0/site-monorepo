@@ -15,12 +15,12 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
+import useSWR from "swr";
+import Date from "../src/blog/components/date";
 import { VALID_TAGS } from "../src/blog/constants";
 import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
 import { blogStyles } from "../src/blog/styles/styles";
 import { DefaultLayout } from "../src/layout";
-import useSWR from "swr";
-import Date from "../src/blog/components/date";
 
 export async function getStaticProps(): Promise<{
   props: {
@@ -67,9 +67,9 @@ export default function Blog({
     <DefaultLayout head="blog" title="Posts">
       <FilterByTags tags={tags} setTags={setTags} />
       <Grid container spacing={3} direction="column">
-        {postData.map(({ id, date, title, tags }) => (
-          <Grid item key={id}>
-            <PostCard id={id} title={title} date={date} tags={tags} />
+        {postData.map((data) => (
+          <Grid item key={data.id}>
+            <PostCard postData={data} />
           </Grid>
         ))}
       </Grid>
@@ -77,33 +77,23 @@ export default function Blog({
   );
 }
 
-function PostCard({
-  id,
-  title,
-  date,
-  tags,
-}: {
-  id: string;
-  title: string;
-  date: string;
-  tags: string[];
-}): JSX.Element {
+function PostCard({ postData }: { postData: PostData }): JSX.Element {
   const theme = useTheme();
 
   return (
-    <Link href={`/posts/${id}`}>
+    <Link href={`/posts/${postData.id}`}>
       <Card variant="outlined">
         <CardActionArea>
           <Box margin={theme.spacing(0.5)} textAlign="center">
-            <Typography variant="h6">{title}</Typography>
+            <Typography variant="h6">{postData.title}</Typography>
             <small>
               <br />
               <Typography color="textSecondary">
-                <Date dateString={date} />
+                <Date dateString={postData.date} />
               </Typography>
               <br />
               <Typography color="textSecondary">
-                Tags: {tags.join(", ")}
+                Tags: {postData.tags.join(", ")}
               </Typography>
             </small>
           </Box>
