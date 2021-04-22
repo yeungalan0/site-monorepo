@@ -1,5 +1,3 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import * as constants from "../src/couple-game/constants";
 import {
   AppBar,
   Box,
@@ -11,8 +9,10 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-
 import { makeStyles } from "@material-ui/styles";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import * as constants from "../src/couple-game/constants";
+import { DefaultGridLayout } from "../src/layout";
 import { darkTheme as theme } from "../src/theme";
 
 // style={{ border: "solid 1px", backgroundColor: "orange" }}
@@ -25,9 +25,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: "none",
     color: "black",
     textAlign: "center",
-  },
-  contentContainer: {
-    height: "92vh",
+    position: "fixed",
   },
   title: {
     padding: theme.spacing(2),
@@ -71,23 +69,19 @@ const useStyles = makeStyles(() => ({
 export default function CoupleGame(): JSX.Element {
   const classes = useStyles();
 
-  // TODO: use default layout here
   return (
     <Fragment>
-      <Grid container direction="column" className={classes.contentContainer}>
-        <Grid item>
-          <Typography variant="h4" align="center" className={classes.title}>
-            Welcome to the couple game! 💕😘
-          </Typography>
-        </Grid>
-        <Grid item container>
-          <Grid item sm={2} md={4} />
-          <Grid item xs={12} sm={8} md={4}>
-            <Content />
+      <DefaultGridLayout
+        title={
+          <Grid item>
+            <Typography variant="h4" align="center" className={classes.title}>
+              Welcome to the couple game! 💕😘
+            </Typography>
           </Grid>
-          <Grid item sm={2} md={4} />
-        </Grid>
-      </Grid>
+        }
+      >
+        <Content />
+      </DefaultGridLayout>
       <AppBar position="sticky" className={classes.footer}>
         <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
       </AppBar>

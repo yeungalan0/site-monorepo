@@ -1,20 +1,21 @@
 import {
   AppBar,
   Grid,
-  Toolbar,
   GridSize,
-  Typography,
-  Tooltip,
+  Slide,
   Switch,
-  useTheme,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useScrollTrigger
 } from "@material-ui/core";
+import Brightness2Icon from "@material-ui/icons/Brightness2";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useContext } from "react";
+import { Fragment, ReactElement, useContext } from "react";
 import { useStyles } from "./style";
 import { ToggleThemeContext } from "./theme-provider";
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
 
 type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
@@ -150,7 +151,7 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
   const classes = useStyles();
 
   if (title === null) {
-    return <></>;
+    return <Fragment></Fragment>;
   }
 
   return (
@@ -162,62 +163,77 @@ function ConditionalTitle({ title }: { title: string | null }): JSX.Element {
   );
 }
 
-// TODO: make disappear on downward scroll
+function HideOnScroll({
+  children,
+}: {
+  children: ReactElement<any, any> | undefined;
+}) {
+  const trigger = useScrollTrigger();
+
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
+
 export function TopBar(): JSX.Element {
   const classes = useStyles();
   const { toggleTheme, darkThemeActive } = useContext(ToggleThemeContext);
 
   return (
-    <AppBar position="static">
-      <DefaultGridLayout>
-        <Toolbar>
-          <Typography
-            color="textSecondary"
-            variant="h6"
-            className={classes.topic}
-          >
-            <Link href={`/blog`}>
-              <a>Blog</a>
-            </Link>
-          </Typography>
-          <Typography
-            color="textSecondary"
-            variant="h6"
-            className={classes.topic}
-          >
-            <Link href={`/about`}>
-              <a>About</a>
-            </Link>
-          </Typography>
-          <Typography
-            color="textSecondary"
-            variant="h6"
-            className={classes.topic}
-          >
-            <Link href={`/blog`}>
-              <a>Projects</a>
-            </Link>
-          </Typography>
-          <Typography
-            color="textSecondary"
-            variant="h6"
-            className={classes.topic}
-          >
-            <Link href={`/blog`}>
-              <a>Resume</a>
-            </Link>
-          </Typography>
-          <Tooltip title="Toggle Theme"> 
-            <Switch
-              checked={darkThemeActive}
-              onChange={toggleTheme}
-              icon={<WbSunnyIcon fontSize="small" />}
-              checkedIcon={<Brightness2Icon fontSize="small" />}
-              color="default"
-            />
-          </Tooltip>
-        </Toolbar>
-      </DefaultGridLayout>
-    </AppBar>
+    <HideOnScroll>
+      <AppBar position="sticky">
+        <DefaultGridLayout>
+          <Toolbar>
+            <Typography
+              color="textSecondary"
+              variant="h6"
+              className={classes.topic}
+            >
+              <Link href={`/blog`}>
+                <a>Blog</a>
+              </Link>
+            </Typography>
+            <Typography
+              color="textSecondary"
+              variant="h6"
+              className={classes.topic}
+            >
+              <Link href={`/about`}>
+                <a>About</a>
+              </Link>
+            </Typography>
+            <Typography
+              color="textSecondary"
+              variant="h6"
+              className={classes.topic}
+            >
+              <Link href={`/blog`}>
+                <a>Projects</a>
+              </Link>
+            </Typography>
+            <Typography
+              color="textSecondary"
+              variant="h6"
+              className={classes.topic}
+            >
+              <Link href={`/blog`}>
+                <a>Resume</a>
+              </Link>
+            </Typography>
+            <Tooltip title="Toggle Theme">
+              <Switch
+                checked={darkThemeActive}
+                onChange={toggleTheme}
+                icon={<WbSunnyIcon fontSize="small" />}
+                checkedIcon={<Brightness2Icon fontSize="small" />}
+                color="default"
+              />
+            </Tooltip>
+          </Toolbar>
+        </DefaultGridLayout>
+      </AppBar>
+    </HideOnScroll>
   );
 }

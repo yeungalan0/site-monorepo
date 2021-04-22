@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import { darkTheme as theme } from "./theme";
 
-
 const useStyles = makeStyles(() => ({
   topic: {
     paddingLeft: theme.spacing(2),

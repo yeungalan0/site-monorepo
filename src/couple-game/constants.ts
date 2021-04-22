@@ -111,7 +111,7 @@ export const CHALLENGE_LIST: string[] = [
   "You have 8 seconds to say the names of 5 of my relatives.",
   "Close your eyes and let me give you something to smell. You have one try to correctly guess what it is.",
   "Let me put lipstick on you.",
-  "Text 'I got the results, my but is fine' to anyone I choose from your contact list.",
+  "Text 'I got the results, my butt is fine' to anyone I choose from your contact list.",
   "You have 8 seconds to name 2 countries starting with the letter of my choice (excluding O, Q, and Y).",
   "Close your eyes and let me put something in your mouth. You have one try to correctly guess what it is.",
   "Let me tickle your foot for 30 seconds without resistance!",
