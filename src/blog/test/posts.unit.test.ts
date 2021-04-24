@@ -10,28 +10,28 @@ describe("applyFilters", () => {
       title: "test1",
       date: "test1",
       tags: ["finance", "values", "test"],
-      contentHtml: "test1",
+      contentMarkdown: "test1",
     },
     {
       id: "test2",
       title: "test2",
       date: "test2",
       tags: ["testing"],
-      contentHtml: "test2",
+      contentMarkdown: "test2",
     },
     {
       id: "test3",
       title: "test3",
       date: "test3",
       tags: ["values", "finance", "tech"],
-      contentHtml: "test3",
+      contentMarkdown: "test3",
     },
     {
       id: "test4",
       title: "test4",
       date: "test4",
       tags: ["test"],
-      contentHtml: "test4",
+      contentMarkdown: "test4",
     },
   ];
   test("should correctly filter single tags", () => {

@@ -1,4 +1,9 @@
 import { Typography } from "@material-ui/core";
+import ReactMarkdown from "react-markdown";
+// @ts-ignore
+import headings from "remark-autolink-headings";
+// @ts-ignore
+import slug from "remark-slug";
 import Date from "../../src/blog/components/date";
 import { getAllPostIds, getPostData, PostData } from "../../src/blog/lib/posts";
 import { postStyles } from "../../src/blog/styles/styles";
@@ -53,7 +58,10 @@ export default function Post({
       <Typography align="center" color="textSecondary" className={classes.date}>
         <Date dateString={postData.date} />
       </Typography>
-      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+      <ReactMarkdown
+        remarkPlugins={[slug, [headings, { behavior: "wrap" }]]}
+        children={postData.contentMarkdown}
+      />
     </DefaultLayout>
   );
 }

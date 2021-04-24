@@ -2,12 +2,6 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
-import remark from "remark";
-// @ts-ignore
-import headings from "remark-autolink-headings";
-import html from "remark-html";
-// @ts-ignore
-import slug from "remark-slug";
 import { FilterKeys, QueryParams } from "../../../pages/api/post-summary-data";
 import { VALID_TAGS } from "../constants";
 
@@ -19,7 +13,7 @@ export type PostData = {
   title: string;
   date: string;
   tags: string[];
-  contentHtml: string;
+  contentMarkdown: string;
 };
 
 export async function getSortedPostsSummaryData(
@@ -32,7 +26,10 @@ export async function getSortedPostsSummaryData(
       const id = fileName.replace(/\.md$/, "");
 
       return getPostData(id).then((postData) => {
-        postData.contentHtml = getSnippet(postData.contentHtml, charLimit);
+        postData.contentMarkdown = getSnippet(
+          postData.contentMarkdown,
+          charLimit
+        );
         return postData;
       });
     }
@@ -112,13 +109,7 @@ export async function getPostData(id: string): Promise<PostData> {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
-  // Use remark to convert markdown into HTML string
-  const processedContent = await remark()
-    .use(slug)
-    .use(headings, { behavior: "wrap" })
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  const contentMarkdown = matterResult.content;
 
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
@@ -126,7 +117,13 @@ export async function getPostData(id: string): Promise<PostData> {
   validateTags(tags);
 
   // Combine the data with the id
-  const data: PostData = { id, title, date, tags, contentHtml };
+  const data: PostData = {
+    id,
+    title,
+    date,
+    tags,
+    contentMarkdown: contentMarkdown,
+  };
 
   return data;
 }
