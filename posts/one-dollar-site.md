@@ -11,6 +11,12 @@ Details the creation of my [One Dollar Site](/), tech used, and lessons learned.
 I wanted to work on my webapp skills, and figured one of the easiest things I
 could make was a one dollar site, and I was kinda right!
 
+# Links
+
+- [Project link](/one-dollar-site)
+- Front-end code # TODO
+- [Back-end code](https://github.com/yeungalan0/one_dollar_site_back_end)
+
 # Concept
 
 A one dollar site is a site where you have the opportunity to pay one dollar to

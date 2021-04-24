@@ -19,7 +19,6 @@ export type PostData = {
   title: string;
   date: string;
   tags: string[];
-  link: string | null;
   contentHtml: string;
 };
 
@@ -124,12 +123,10 @@ export async function getPostData(id: string): Promise<PostData> {
   const title: string = matterResult.data.title;
   const date: string = matterResult.data.date;
   const tags: string[] = matterResult.data.tags;
-  const link: string | null = matterResult.data.link ?? null;
   validateTags(tags);
-  validateLink(link);
 
   // Combine the data with the id
-  const data: PostData = { id, title, date, tags, link, contentHtml };
+  const data: PostData = { id, title, date, tags, contentHtml };
 
   return data;
 }
@@ -137,16 +134,9 @@ export async function getPostData(id: string): Promise<PostData> {
 function validateTags(tags: string[]) {
   tags.forEach((tag) => {
     if (!VALID_TAGS.includes(tag)) {
-      throw Error("invalid tag!");
+      throw Error(`invalid tag: '${tag}'`);
     }
   });
-}
-
-// TODO
-function validateLink(link: string | null) {
-  if (link === null || link.startsWith("http")) {
-    return;
-  }
 }
 
 export const testables = {
