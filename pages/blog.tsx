@@ -20,6 +20,7 @@ import {
   Dispatch,
   MutableRefObject,
   SetStateAction,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -51,6 +52,7 @@ export async function getStaticProps(): Promise<{
   };
 }
 
+// TODO: test this site functionality
 export default function Blog({
   allPostsData,
 }: {
@@ -59,21 +61,28 @@ export default function Blog({
   const router = useRouter();
   const [tags, setTags] = useState<string[]>([]);
   const tagsUpdatedRef = useRef(false);
-  // Run initial query in params if there is one
-  if (!isEmpty(router.query) && !tagsUpdatedRef.current) {
+  const [errors, setErrors] = useState<Error[]>([]);
+
+  useEffect(() => {
+    // Run initial query with params if there is any
     const queryParams = getQueryParams(router.query as NextApiRequest["query"]);
-    const errors = validateQuery(queryParams, querySchema);
+    const queryErrors = validateQuery(queryParams, querySchema);
 
-    if (errors.length > 0) {
-      return (
-        <div>
-          failed to load: "{errors.map((error) => `${error.message}, `)}"
-        </div>
-      );
+    if (queryErrors.length > 0) {
+      setErrors(queryErrors);
+    } else if (isEmpty(queryParams) && tags.length == 0) {
+      // do nothing
+    } else {
+      tagsUpdatedRef.current = true;
+      setTags(queryParams[FilterKeys.TAGS] ?? []);
     }
+  }, [router.query]);
 
-    tagsUpdatedRef.current = true;
-    setTags(queryParams[FilterKeys.TAGS]);
+  if (errors.length > 0) {
+    // TODO: perhaps redirect to error page with info?
+    return (
+      <div>failed to load: "{errors.map((error) => `${error.message}, `)}"</div>
+    );
   }
 
   return (
