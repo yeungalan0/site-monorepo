@@ -16,21 +16,21 @@ export type QueryParams = {
   [key: string]: string[];
 };
 
-const querySchema: schema = {
+export const querySchema: schema = {
   [FilterKeys.TAGS]: (value: string[]) => {
     const isValidTag = (tag: string) => VALID_TAGS.includes(tag);
     return value.every(isValidTag);
   },
 };
 
-function validate(query: QueryParams, mySchema: schema) {
+export function validateQuery(query: QueryParams, mySchema: schema) {
   return Object.keys(query)
     .filter(
       (key) =>
         !Object.values(FilterKeys).includes(key as FilterKeys) ||
         !mySchema[key as FilterKeys](query[key])
     )
-    .map((key) => new Error(`Key: '${key}' is invalid.`));
+    .map((key) => new Error(`Key: '${key}' or associated value(s) is invalid`));
 }
 
 export default async function getPostSummaryData(
@@ -39,19 +39,19 @@ export default async function getPostSummaryData(
 ): Promise<void> {
   const queryParams: QueryParams = getQueryParams(req.query);
 
-  const errors = validate(queryParams, querySchema);
+  const errors = validateQuery(queryParams, querySchema);
 
   if (errors.length > 0) {
+    res.statusCode = 400; // Note: tested, order for this is important
     res.json(errors.map((error) => error.message));
-    res.statusCode = 400;
   } else {
     const sortedPostsData = await getSortedPostsSummaryData(queryParams);
-    res.json(sortedPostsData);
     res.statusCode = 200;
+    res.json(sortedPostsData);
   }
 }
 
-function getQueryParams(query: NextApiRequest["query"]): QueryParams {
+export function getQueryParams(query: NextApiRequest["query"]): QueryParams {
   const queryParams: QueryParams = {};
 
   Object.keys(query).forEach((key) => {
@@ -63,8 +63,3 @@ function getQueryParams(query: NextApiRequest["query"]): QueryParams {
 
   return queryParams;
 }
-
-export const testables = {
-  querySchema: querySchema,
-  validate: validate,
-};

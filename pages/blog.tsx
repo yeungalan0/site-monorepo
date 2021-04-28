@@ -14,13 +14,28 @@ import {
   Typography,
   useTheme,
 } from "@material-ui/core";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { NextApiRequest } from "next";
+import { useRouter } from "next/router";
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import useSWR from "swr";
 import Date from "../src/blog/components/date";
 import { VALID_TAGS } from "../src/blog/constants";
 import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
 import { blogStyles } from "../src/blog/styles/styles";
 import { DefaultLayout } from "../src/layout";
+import { fetcher, isEmpty } from "../src/utils";
+import {
+  FilterKeys,
+  getQueryParams,
+  querySchema,
+  validateQuery,
+} from "./api/post-summary-data";
 
 export async function getStaticProps(): Promise<{
   props: {
@@ -41,39 +56,77 @@ export default function Blog({
 }: {
   allPostsData: PostData[];
 }): JSX.Element {
-  const [postData, setPostData] = useState<PostData[]>(allPostsData);
+  const router = useRouter();
   const [tags, setTags] = useState<string[]>([]);
-  const isFirstRender = useRef(true);
+  const tagsUpdatedRef = useRef(false);
+  // Run initial query in params if there is one
+  if (!isEmpty(router.query) && !tagsUpdatedRef.current) {
+    const queryParams = getQueryParams(router.query as NextApiRequest["query"]);
+    const errors = validateQuery(queryParams, querySchema);
 
-  const fetcher = (url: string) => fetch(url).then((r) => r.json());
-  const shouldFetch = !isFirstRender.current;
-  const { data, error } = useSWR<PostData[], Error>(
-    () =>
-      shouldFetch ? `/api/post-summary-data?${buildTagsQuery(tags)}` : null,
-    fetcher
-  );
+    if (errors.length > 0) {
+      return (
+        <div>
+          failed to load: "{errors.map((error) => `${error.message}, `)}"
+        </div>
+      );
+    }
 
-  if (data !== postData && data !== undefined) {
-    setPostData(data);
-  } else if (shouldFetch && error) {
-    return <div>failed to load</div>;
-  } else if (shouldFetch && !data) {
-    return <div>loading...</div>;
-  } else {
-    isFirstRender.current = false;
+    tagsUpdatedRef.current = true;
+    setTags(queryParams[FilterKeys.TAGS]);
   }
 
   return (
     <DefaultLayout head="blog" title="Posts">
-      <FilterByTags tags={tags} setTags={setTags} />
-      <Grid container spacing={3} direction="column">
-        {postData.map((data) => (
-          <Grid item key={data.id}>
-            <PostCard postData={data} />
-          </Grid>
-        ))}
-      </Grid>
+      <FilterByTags
+        tags={tags}
+        setTags={setTags}
+        tagsUpdatedRef={tagsUpdatedRef}
+      />
+      <PostsList
+        tags={tags}
+        allPostsData={allPostsData}
+        tagsUpdatedRef={tagsUpdatedRef}
+      ></PostsList>
     </DefaultLayout>
+  );
+}
+
+function PostsList({
+  tags,
+  allPostsData,
+  tagsUpdatedRef,
+}: {
+  tags: string[];
+  allPostsData: PostData[];
+  tagsUpdatedRef: MutableRefObject<boolean>;
+}): JSX.Element {
+  let postData: PostData[] = allPostsData;
+
+  const { data, error } = useSWR<PostData[], Error>(
+    () =>
+      tagsUpdatedRef.current
+        ? `/api/post-summary-data?${buildTagsQuery(tags)}`
+        : null,
+    fetcher
+  );
+
+  if (data !== undefined) {
+    postData = data;
+  } else if (error) {
+    return <div>failed to load: "{error.message}"</div>;
+  } else if (tagsUpdatedRef.current && !data) {
+    return <div>loading...</div>;
+  }
+
+  return (
+    <Grid container spacing={3} direction="column">
+      {postData.map((data) => (
+        <Grid item key={data.id}>
+          <PostCard postData={data} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }
 
@@ -106,13 +159,16 @@ function PostCard({ postData }: { postData: PostData }): JSX.Element {
 function FilterByTags({
   tags,
   setTags,
+  tagsUpdatedRef,
 }: {
   tags: string[];
   setTags: Dispatch<SetStateAction<string[]>>;
+  tagsUpdatedRef: MutableRefObject<boolean>;
 }): JSX.Element {
   const classes = blogStyles();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    tagsUpdatedRef.current = true;
     setTags(event.target.value as string[]);
   };
 

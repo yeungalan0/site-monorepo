@@ -1,7 +1,6 @@
+import { CssBaseline, MuiThemeProvider, Theme } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
-import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
-import { lightTheme, darkTheme } from "./theme";
-import { Theme } from "@material-ui/core";
+import { darkTheme, lightTheme } from "./theme";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -19,7 +18,7 @@ type SelectedTheme = {
   appliedTheme: Theme;
 };
 
-const themeStorageKey = "theme"
+const themeStorageKey = "theme";
 
 enum ThemeName {
   DARK_THEME = "darkTheme",
@@ -37,16 +36,25 @@ export const CustomThemeProvider: React.FC<ThemeProviderProps> = ({
   useEffect(() => {
     const theme = localStorage.getItem(themeStorageKey);
     if (theme && theme === ThemeName.LIGHT_THEME) {
-      setSelectedTheme({ appliedTheme: lightTheme, themeName: ThemeName.LIGHT_THEME });
+      setSelectedTheme({
+        appliedTheme: lightTheme,
+        themeName: ThemeName.LIGHT_THEME,
+      });
     }
   }, []);
 
   const toggleTheme = useCallback(() => {
-      if (!selectedTheme || selectedTheme.themeName === ThemeName.DARK_THEME) {
-      setSelectedTheme({ appliedTheme: lightTheme, themeName: ThemeName.LIGHT_THEME });
+    if (!selectedTheme || selectedTheme.themeName === ThemeName.DARK_THEME) {
+      setSelectedTheme({
+        appliedTheme: lightTheme,
+        themeName: ThemeName.LIGHT_THEME,
+      });
       localStorage.setItem(themeStorageKey, ThemeName.LIGHT_THEME);
     } else {
-      setSelectedTheme({ appliedTheme: darkTheme, themeName: ThemeName.DARK_THEME });
+      setSelectedTheme({
+        appliedTheme: darkTheme,
+        themeName: ThemeName.DARK_THEME,
+      });
       localStorage.setItem(themeStorageKey, ThemeName.DARK_THEME);
     }
   }, [selectedTheme, setSelectedTheme]);

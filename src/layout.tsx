@@ -7,7 +7,7 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useScrollTrigger
+  useScrollTrigger,
 } from "@material-ui/core";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
@@ -209,7 +209,7 @@ export function TopBar(): JSX.Element {
               variant="h6"
               className={classes.topic}
             >
-              <Link href={`/blog`}>
+              <Link href={`/blog?tags=projects`}>
                 <a>Projects</a>
               </Link>
             </Typography>
