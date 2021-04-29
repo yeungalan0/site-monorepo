@@ -192,7 +192,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog`}>
-                <a>Blog</a>
+                <a data-cy="topbar-blog">Blog</a>
               </Link>
             </Typography>
             <Typography
@@ -201,7 +201,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/about`}>
-                <a>About</a>
+                <a data-cy="topbar-about">About</a>
               </Link>
             </Typography>
             <Typography
@@ -210,7 +210,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog?tags=projects`}>
-                <a>Projects</a>
+                <a data-cy="topbar-projects">Projects</a>
               </Link>
             </Typography>
             <Typography
@@ -219,7 +219,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog`}>
-                <a>Resume</a>
+                <a data-cy="topbar-resume">Resume</a>
               </Link>
             </Typography>
             <Tooltip title="Toggle Theme">
@@ -229,6 +229,7 @@ export function TopBar(): JSX.Element {
                 icon={<WbSunnyIcon fontSize="small" />}
                 checkedIcon={<Brightness2Icon fontSize="small" />}
                 color="default"
+                data-cy="topbar-toggle-theme"
               />
             </Tooltip>
           </Toolbar>

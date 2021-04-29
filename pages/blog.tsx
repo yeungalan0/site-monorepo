@@ -131,7 +131,7 @@ function PostsList({
   return (
     <Grid container spacing={3} direction="column">
       {postData.map((data) => (
-        <Grid item key={data.id}>
+        <Grid item key={data.id} data-cy="blog-posts">
           <PostCard postData={data} />
         </Grid>
       ))}
