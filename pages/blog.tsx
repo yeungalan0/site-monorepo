@@ -188,12 +188,16 @@ function FilterByTags({
         multiple
         value={tags}
         onChange={handleChange}
-        input={<Input />}
+        input={<Input inputProps={{ "data-cy": "blog-tags-filter-input" }} />}
         renderValue={(selected) => (selected as string[]).join(", ")}
+        data-cy="blog-tags-filter"
       >
         {VALID_TAGS.map((tag) => (
           <MenuItem key={tag} value={tag}>
-            <Checkbox checked={tags.indexOf(tag) > -1} />
+            <Checkbox
+              checked={tags.indexOf(tag) > -1}
+              inputProps={{ "data-cy": `blog-tags-filter-box-${tag}` }}
+            />
             <ListItemText primary={tag} />
           </MenuItem>
         ))}

@@ -183,7 +183,7 @@ export function TopBar(): JSX.Element {
 
   return (
     <HideOnScroll>
-      <AppBar position="sticky">
+      <AppBar position="sticky" data-cy="top-bar">
         <DefaultGridLayout>
           <Toolbar>
             <Typography
@@ -192,7 +192,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog`}>
-                <a data-cy="topbar-blog">Blog</a>
+                <a data-cy="top-bar-blog">Blog</a>
               </Link>
             </Typography>
             <Typography
@@ -201,7 +201,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/about`}>
-                <a data-cy="topbar-about">About</a>
+                <a data-cy="top-bar-about">About</a>
               </Link>
             </Typography>
             <Typography
@@ -210,7 +210,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog?tags=projects`}>
-                <a data-cy="topbar-projects">Projects</a>
+                <a data-cy="top-bar-projects">Projects</a>
               </Link>
             </Typography>
             <Typography
@@ -219,7 +219,7 @@ export function TopBar(): JSX.Element {
               className={classes.topic}
             >
               <Link href={`/blog`}>
-                <a data-cy="topbar-resume">Resume</a>
+                <a data-cy="top-bar-resume">Resume</a>
               </Link>
             </Typography>
             <Tooltip title="Toggle Theme">
@@ -229,7 +229,7 @@ export function TopBar(): JSX.Element {
                 icon={<WbSunnyIcon fontSize="small" />}
                 checkedIcon={<Brightness2Icon fontSize="small" />}
                 color="default"
-                data-cy="topbar-toggle-theme"
+                inputProps={{ "data-cy": "top-bar-toggle-theme" }}
               />
             </Tooltip>
           </Toolbar>
