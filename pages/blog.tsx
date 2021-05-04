@@ -196,6 +196,7 @@ function FilterByTags({
           <MenuItem key={tag} value={tag}>
             <Checkbox
               checked={tags.indexOf(tag) > -1}
+              // @ts-ignore
               inputProps={{ "data-cy": `blog-tags-filter-box-${tag}` }}
             />
             <ListItemText primary={tag} />
