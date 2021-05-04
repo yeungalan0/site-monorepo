@@ -1,5 +1,3 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import * as constants from "../src/couple-game/constants";
 import {
   AppBar,
   Box,
@@ -11,10 +9,11 @@ import {
   Tooltip,
   Typography,
 } from "@material-ui/core";
-
-import Header from "../src/header";
 import { makeStyles } from "@material-ui/styles";
-import theme from "../src/theme";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import * as constants from "../src/couple-game/constants";
+import { DefaultGridLayout } from "../src/layout";
+import { darkTheme as theme } from "../src/theme";
 
 // style={{ border: "solid 1px", backgroundColor: "orange" }}
 
@@ -26,9 +25,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: "none",
     color: "black",
     textAlign: "center",
-  },
-  contentContainer: {
-    height: "92vh",
+    position: "fixed",
   },
   title: {
     padding: theme.spacing(2),
@@ -74,23 +71,17 @@ export default function CoupleGame(): JSX.Element {
 
   return (
     <Fragment>
-      <Grid container direction="column" className={classes.contentContainer}>
-        <Grid item>
-          <Header />
-        </Grid>
-        <Grid item>
-          <Typography variant="h4" align="center" className={classes.title}>
-            Welcome to the couple game! 💕😘
-          </Typography>
-        </Grid>
-        <Grid item container>
-          <Grid item sm={2} md={4} />
-          <Grid item xs={12} sm={8} md={4}>
-            <Content />
+      <DefaultGridLayout
+        title={
+          <Grid item>
+            <Typography variant="h4" align="center" className={classes.title}>
+              Welcome to the couple game! 💕😘
+            </Typography>
           </Grid>
-          <Grid item sm={2} md={4} />
-        </Grid>
-      </Grid>
+        }
+      >
+        <Content />
+      </DefaultGridLayout>
       <AppBar position="sticky" className={classes.footer}>
         <p>Dedicated to my wonderful girlfriend, Jen 😳😽</p>
       </AppBar>
@@ -219,6 +210,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
           Card: {cardsTodo}/{allCards}
         </Grid>
         <Grid
+          container
           item
           alignItems="center"
           justify="center"
@@ -226,7 +218,7 @@ function CoupleGameBoard({ players }: { players: string[] }): JSX.Element {
         >
           <CurrentCard card={card}></CurrentCard>
         </Grid>
-        <Grid item justify="center" className={classes.pointButtons}>
+        <Grid container item justify="center" className={classes.pointButtons}>
           <PointButtons
             nextTurn={nextTurn}
             pointEarned={pointEarned}
@@ -345,12 +337,13 @@ function getPlayerStatCards(playerStats: PlayerStat[], turnIndex: number) {
       <PlayerStatCard
         styleProps={inputProps}
         playerStat={playerStat}
+        key={playerStatCards.length}
       ></PlayerStatCard>
     );
 
     if (index !== playerStats.length - 1) {
       playerStatCards.push(
-        <Grid item>
+        <Grid item key={playerStatCards.length}>
           <Box display="flex" alignItems="center" height="100%">
             ❤️
           </Box>

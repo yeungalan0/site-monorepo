@@ -6,7 +6,8 @@
     "prettier",
     "plugin:prettier/recommended",
     "prettier/react",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "plugin:react-hooks/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -18,5 +19,8 @@
   },
   "globals": {
     "React": "writable"
+  },
+  "env": {
+    "jest/globals": true
   }
 }

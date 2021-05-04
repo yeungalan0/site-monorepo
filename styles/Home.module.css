@@ -1,3 +1,5 @@
+/* TODO: delete this */
+
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
@@ -129,8 +131,8 @@
 .countBox {
   display: block;
   background: rgb(241, 241, 21);
-  border: .25em solid darkgoldenrod;
-  padding: .2em;
+  border: 0.25em solid darkgoldenrod;
+  padding: 0.2em;
   font-weight: bold;
   font-size: 3em;
   position: relative;
@@ -140,12 +142,12 @@
 .countBox .tooltip {
   visibility: hidden;
   width: 7em;
-  background-color: rgba(0,0,0,0.5);;
+  background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
   text-align: center;
-  border-radius: .5em;
-  padding: .25em 0;
-  font-size: .5em;
+  border-radius: 0.5em;
+  padding: 0.25em 0;
+  font-size: 0.5em;
 
   /* Position the tooltip */
   position: absolute;

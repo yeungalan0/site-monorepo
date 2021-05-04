@@ -1,7 +1,7 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import React from "react";
 import Combined from "../components/combined";
+import styles from "../styles/Home.module.css";
 
 function Description() {
   const description =
@@ -19,12 +19,11 @@ function Description() {
   );
 }
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <div className={styles.container}>
       <Head>
         <title>One Dollar Site</title>
-        {/*TODO: Change this*/}
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -34,18 +33,6 @@ export default function Home() {
         <Description />
         <Combined />
       </main>
-
-      {/* TODO: Update this */}
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
   );
 }
