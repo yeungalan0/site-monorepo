@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "debug": "NODE_OPTIONS='--inspect' next dev",
-    "test": "jest",
+    "test:jest": "jest",
+    "test:cy": "cypress run",
+    "test": "npm run test:jest && npm run test:cy",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
