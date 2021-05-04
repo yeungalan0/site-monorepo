@@ -218,7 +218,7 @@ export function TopBar(): JSX.Element {
               variant="h6"
               className={classes.topic}
             >
-              <Link href={`/blog`}>
+              <Link href={`/resume/resume_cv.pdf`}>
                 <a data-cy="top-bar-resume">Resume</a>
               </Link>
             </Typography>

@@ -9,6 +9,10 @@ tags: ["projects"]
 Details the work done for my [Advent of Code 2020][aoc-repo] repository,
 including algorithms, tech used, and lessons learned.
 
+# Links
+
+- [Project repo](https://github.com/yeungalan0/misc/tree/main/advent_of_code_2020)
+
 # Concept
 
 [Advent of Code][aoc-about] is an [advent calendar][advent-calendar] where you
