@@ -229,6 +229,7 @@ export function TopBar(): JSX.Element {
                 icon={<WbSunnyIcon fontSize="small" />}
                 checkedIcon={<Brightness2Icon fontSize="small" />}
                 color="default"
+                // @ts-ignore
                 inputProps={{ "data-cy": "top-bar-toggle-theme" }}
               />
             </Tooltip>
