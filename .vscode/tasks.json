@@ -7,6 +7,13 @@
 			"problemMatcher": [],
 			"label": "npm: dev",
 			"detail": "next dev"
+		},
+		{
+			"type": "npm",
+			"script": "debug",
+			"problemMatcher": [],
+			"label": "npm: debug",
+			"detail": "next debug"
 		}
 	]
 }
