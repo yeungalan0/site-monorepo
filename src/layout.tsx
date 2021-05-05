@@ -188,7 +188,7 @@ export function TopBar(): JSX.Element {
     <HideOnScroll>
       <AppBar position="sticky" data-cy="top-bar">
         <DefaultGridLayout>
-          <Toolbar>
+          <Toolbar className={classes.toolbar}>
             <Typography
               color="textSecondary"
               variant="h6"
