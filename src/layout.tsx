@@ -65,6 +65,8 @@ export function DefaultGridLayout({
     xl: 4,
   },
 }: DefaultGridLayoutProps): JSX.Element {
+  const classes = useStyles();
+
   const { leftEdge: xsLeftEdge, rightEdge: xsRightEdge } = getEdgeSizes(
     gridSizes.xs
   );
@@ -100,6 +102,7 @@ export function DefaultGridLayout({
           md={gridSizes.md}
           lg={gridSizes.lg}
           xl={gridSizes.xl}
+          className={classes.contentGrid}
         >
           {children}
         </Grid>

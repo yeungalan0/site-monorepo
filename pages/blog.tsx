@@ -110,6 +110,7 @@ function PostsList({
   allPostsData: PostData[];
   tagsUpdatedRef: MutableRefObject<boolean>;
 }): JSX.Element {
+  const classes = blogStyles();
   let postData: PostData[] = allPostsData;
 
   const { data, error } = useSWR<PostData[], Error>(
@@ -129,9 +130,14 @@ function PostsList({
   }
 
   return (
-    <Grid container spacing={3} direction="column">
+    <Grid container direction="column">
       {postData.map((data) => (
-        <Grid item key={data.id} data-cy="blog-posts">
+        <Grid
+          item
+          key={data.id}
+          className={classes.postList}
+          data-cy="blog-posts"
+        >
           <PostCard postData={data} />
         </Grid>
       ))}
