@@ -5,6 +5,7 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -15,5 +16,10 @@ jobs:
         with:
           build: npm run build
           start: npm start
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
       - name: Jest run
         run: npm test:jest
