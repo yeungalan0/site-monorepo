@@ -3,7 +3,7 @@ name: Cypress and Jest tests
 on: [push]
 
 jobs:
-  cypress-run:
+  cypress-and-jest-run:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
