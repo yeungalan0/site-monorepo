@@ -11,7 +11,7 @@ describe("Blog", () => {
     // test filtering with one box works
     cy.visit("/blog").get("[data-cy=blog-tags-filter]").click();
     cy.get("[data-cy=blog-tags-filter-box-values]").click();
-    cy.get("[data-cy=blog-posts]")
+    cy.get("[data-cy=blog-posts]", { timeout: 10000 })
       .its("length")
       .should("lt", this.postsListLength);
 
