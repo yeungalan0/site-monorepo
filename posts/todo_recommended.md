@@ -5,7 +5,3 @@ tags: ["finance"]
 ---
 
 # TODO
-
-# Resources
-
-https://youtu.be/o7w5r5PfBKo

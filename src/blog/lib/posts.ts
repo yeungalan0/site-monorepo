@@ -20,7 +20,8 @@ export async function getSortedPostsSummaryData(
   queryParams: QueryParams
 ): Promise<PostData[]> {
   // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory);
+  const fileNames = getFileNamesWithoutTodos(postsDirectory);
+
   const allPostsDataPromises: Promise<PostData>[] = fileNames.map(
     (fileName) => {
       const id = fileName.replace(/\.md$/, "");
@@ -78,7 +79,7 @@ export function getAllPostIds(): {
     id: string;
   };
 }[] {
-  const fileNames = fs.readdirSync(postsDirectory);
+  const fileNames = getFileNamesWithoutTodos(postsDirectory);
 
   // Returns an array that looks like this:
   // [
@@ -134,6 +135,12 @@ function validateTags(tags: string[]) {
       throw Error(`invalid tag: '${tag}'`);
     }
   });
+}
+
+function getFileNamesWithoutTodos(path: string): string[] {
+  return fs
+    .readdirSync(path)
+    .filter((fileName) => !fileName.startsWith("todo_"));
 }
 
 export const testables = {

@@ -2,6 +2,7 @@ import { Typography } from "@material-ui/core";
 import ReactMarkdown from "react-markdown";
 // @ts-ignore
 import headings from "remark-autolink-headings";
+import footnotes from "remark-footnotes";
 // @ts-ignore
 import slug from "remark-slug";
 import Date from "../../src/blog/components/date";
@@ -59,7 +60,7 @@ export default function Post({
         <Date dateString={postData.date} />
       </Typography>
       <ReactMarkdown
-        remarkPlugins={[slug, [headings, { behavior: "wrap" }]]}
+        remarkPlugins={[slug, [headings, { behavior: "wrap" }], footnotes]}
         children={postData.contentMarkdown}
       />
     </DefaultLayout>
