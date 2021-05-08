@@ -65,6 +65,8 @@ export function DefaultGridLayout({
     xl: 4,
   },
 }: DefaultGridLayoutProps): JSX.Element {
+  const classes = useStyles();
+
   const { leftEdge: xsLeftEdge, rightEdge: xsRightEdge } = getEdgeSizes(
     gridSizes.xs
   );
@@ -100,6 +102,7 @@ export function DefaultGridLayout({
           md={gridSizes.md}
           lg={gridSizes.lg}
           xl={gridSizes.xl}
+          className={classes.contentGrid}
         >
           {children}
         </Grid>
@@ -185,7 +188,7 @@ export function TopBar(): JSX.Element {
     <HideOnScroll>
       <AppBar position="sticky" data-cy="top-bar">
         <DefaultGridLayout>
-          <Toolbar>
+          <Toolbar className={classes.toolbar}>
             <Typography
               color="textSecondary"
               variant="h6"
@@ -218,7 +221,7 @@ export function TopBar(): JSX.Element {
               variant="h6"
               className={classes.topic}
             >
-              <Link href={`/blog`}>
+              <Link href={`/resume/resume_cv.pdf`}>
                 <a data-cy="top-bar-resume">Resume</a>
               </Link>
             </Typography>

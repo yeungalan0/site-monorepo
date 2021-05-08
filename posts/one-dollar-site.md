@@ -14,7 +14,7 @@ could make was a one dollar site, and I was kinda right!
 # Links
 
 - [Project link](/one-dollar-site)
-- Front-end code # TODO
+- [Front-end code](https://github.com/yeungalan0/my_site/blob/main/pages/one-dollar-site.tsx)
 - [Back-end code](https://github.com/yeungalan0/one_dollar_site_back_end)
 
 # Concept

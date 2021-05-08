@@ -1,0 +1,165 @@
+%----------------------------------------------------------------------------------------
+%       SPECTIAL COMMANDS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\varLengthCells}[3]{\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - #3\textwidth} R{#3\textwidth}} #1 & #2 \end{tabular*}}
+
+% Define an entry of cv information
+% Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}{<width1>}{<width2>}
+%% \newcommand*{\myProject}[7]{%
+%%   \setlength\tabcolsep{0pt}
+%%   \setlength{\extrarowheight}{0pt}
+%%   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
+%%     \varLengthCells{\entrytitlestyle{#2}}{\entrylocationstyle{#3}}{#6} \\
+%%     \vspace{-1em}
+%%     \varLengthCells{\entrypositionstyle{#1}}{\entrydatestyle{#4}}{#7} \\
+%%     \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}} \\
+%%   \end{tabular*}
+%% }
+
+%----------------------------------------------------------------------------------------
+%	SECTION TITLE
+%----------------------------------------------------------------------------------------
+
+\cvsection{Projects}
+
+%----------------------------------------------------------------------------------------
+%	SECTION CONTENT
+%----------------------------------------------------------------------------------------
+
+\begin{cventries}
+
+%------------------------------------------------
+
+% \vspace{-1em}
+% \cventry
+% {A simple search engine created to search through gigabytes of review data quickly and efficiently.} % Quick description
+% {Amazon Review Search Engine} % Title
+% {http://cs.coloradocollege.edu/~ayeung/reviewSI/SearchHome.html (link OOO))} % Location
+% {Nov. 2015 - Dec. 2015} % Date(s)
+% { % Description(s)
+% \begin{cvitems}
+% \item {Designed the web interface and document database to quickly search through Amazon review data given search criteria.}
+% \item {(Python, JavaScript, HTML, CGI, Redis, MongoDB)}
+% \end{cvitems}
+% }
+
+%------------------------------------------------
+
+% \vspace{-1em}
+% \cventry
+% {An online service providing professors with a list of students who need to be attended to.} % Description
+% {Professor's Queue Database} % Title
+% {} % Location
+% {Apr. 2014} % Date(s)
+% { % Description(s)
+% \begin{cvitems}
+% \item {Designed and implemented a web page and database with two friends to place students in different teacher queues so that students no longer needed to wait outside a professor's office to ask questions.}
+% \item {Personally designed the database structure and wrote CGI scripts to handle client input and maintain the server-side state. (Python, JavaScript, HTML)}
+% \end{cvitems}
+% }
+
+%------------------------------------------------
+
+% \vspace{-.25em}
+% \cventry
+% {Programmed the alpha-beta pruning algorithm for a bot that won the class competition} % Description
+% {Othello Bot} % Title
+% {https://github.com/yeungalan0/Othello} % Location
+% {Mar. 2015} % Date(s)
+% { % Description(s)
+% \begin{cvitems}
+% \item {Made a bot for a class project using object oriented programming, alpha beta pruning, and heuristics to play Othello strategically}
+% \item {The bot, won the class competition and is undefeated so far when played against other online bots (project used Java)}
+% \end{cvitems}
+% }
+
+%------------------------------------------------
+
+% \vspace{-1.5em}
+% \cventry
+% {Developed and trained an AI agent to perform intelligent actions in a Minecraft like environment} % Description
+% {Minecraft AI} % Title
+% {https://tinyurl.com/ayeung-minecraft} % Location
+% {2015-2016} % Date(s)
+% { % Description(s)
+% \begin{cvitems}
+% \item {Interfaced an existing Minecraft game environment with a neural network developed by Google DeepMind}
+% \item {Trained the agent to perform several tasks in the 3D environment and analyzed learning}
+% \item {Worked on developing a better algorithm through Transfer Learning}
+% \item {Published paper at IJCAI Deep Reinforcement Learning workshop based on our research (project used Python, Caffe, Torch, Lua, C++)}
+% \end{cvitems}
+% }
+
+%------------------------------------------------
+
+% \vspace{-2.25em}
+% \cventry
+% {Developed a program that queried several APIs and suggested books to users based on user criteria} % Description
+% {Wheel of Books} % Title
+% {} % Location
+% {Sep. 2015} % Date(s)
+% { % Description(s)
+% \begin{cvitems}
+% \item {Queried three different APIs (Google Books, ISBNdb, and the Fixer IO API)}
+% \item {Parsed XML and JSON responses from the APIs}
+% \item {Developed a simple UI to present the book information to the user (project used Python, XML, and JSON)}
+% \end{cvitems}
+% }
+
+%------------------------------------------------
+
+\vspace{-.25em}
+\cventry
+{A webapp where people can pay \$1 to see how many other people paid \$1} % Description
+{One Dollar Site (in development)} % Title
+{\href{https://github.com/yeungalan0/one\_dollar\_site\_front\_end}{https://github.com/yeungalan0/one\_dollar\_site\_front\_end} \href{https://github.com/yeungalan0/one\_dollar\_site\_back\_end}{https://github.com/yeungalan0/one\_dollar\_site\_back\_end}} % Location
+{Oct. 2020 - Current} % Date(s)
+{ % Description(s)
+\begin{cvitems}
+\item {Developed NodeJS Lambda function backend to process and store incoming API requests}
+\item {Integrated backend code with PayPal SDK to verify payments}
+\item {Developed NextJS front end to take payments and display the current count to the user}
+\item {Deployed dev environment using automated pipelines, with front end accessible at \href{https://one-dollar-site-front-end.vercel.app/}{https://one-dollar-site-front-end.vercel.app/}}
+\item {\textbf{Tech used/learned:} ReactJS, NextJS framework, PayPal SDK, AWS Lambda/DynamoDB/API-Gateway, NodeJS, Serverless framework}
+\end{cvitems}
+}
+
+%------------------------------------------------
+
+%% \vspace{-1em}
+%% \cventry
+%% {Refactored and updated the Time is Money Chrome extension} % Description
+%% {Time is Money Chrome Extension} % Title
+%% {\href{https://tinyurl.com/ayeung-timeismoney}{https://tinyurl.com/ayeung-timeismoney}} % Location
+%% {June - Sep. 2020} % Date(s)
+%% { % Description(s)
+%% \begin{cvitems}
+%% \item {Developed a popup actions menu to disable/enable the plugin (with icon changing depending on state)}
+%% \item {Developed a feature to only update the active tab on state change to decrease unneeded memory usage}
+%% \item {Refactored and updated the code for easier long term maintainability/understanding}
+%% \item {Made pull request to contribute back changes to main project}
+%% \item {\textbf{Tech used/learned:} JavaScript, Google Chrome Extension framework, HTML, CSS}
+%% \end{cvitems}
+%% }
+
+%------------------------------------------------
+
+\vspace{-1em}
+\cventry
+{Completed Advent of Code 2020 programming advent calender in Go} % Description
+{\href{https://adventofcode.com/}{Advent of Code 2020}} % Title
+{\href{https://github.com/yeungalan0/misc}{https://github.com/yeungalan0/misc}} % Location
+{Dec. 2020 - Jan. 2021} % Date(s)
+{ % Description(s)
+\begin{cvitems}
+\item {Practiced key Test Driven Development concepts to guide my code creation and validate its quality}
+\item {Developed my knowledge of Go, while spreading holiday cheer at the same time}
+\item {Tested and improved my knowledge of programming concepts such as recursive algorithms, dynamic programming, linked lists, the Chinese Remainder theorem, and number theory}
+\item {\textbf{Tech used/learned:} Golang, Gitpod}
+\end{cvitems}
+}
+
+%------------------------------------------------
+
+\end{cventries}

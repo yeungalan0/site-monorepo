@@ -13,6 +13,9 @@ const blogStyles = makeStyles(() => ({
     minWidth: 120,
     maxWidth: 300,
   },
+  postList: {
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 export { postStyles, blogStyles };
