@@ -12,9 +12,9 @@ a long and happy life.
 # Why do I care
 
 [NUMEROUS][sleep-search] [sites][sleep-site], [videos][sleep-videos], and
-experts preach the overwhelming benefits of sleep, and yet, so people actually
-value it with common sayings as "you can sleep when you're dead". But what if
-you die sooner without sleep?
+experts preach the overwhelming benefits of sleep, and yet, so few people
+actually value it with common sayings as "you can sleep when you're dead". But
+what if you die sooner without sleep?
 
 Just to list a [few known benefits][sleep-benefits], sleep has shown to:
 
