@@ -9,6 +9,7 @@ import Date from "../../src/blog/components/date";
 import { getAllPostIds, getPostData, PostData } from "../../src/blog/lib/posts";
 import { postStyles } from "../../src/blog/styles/styles";
 import { DefaultLayout } from "../../src/layout";
+import { useStyles } from "../../src/style";
 
 type postParam = {
   id: string;
@@ -52,6 +53,7 @@ export default function Post({
 }: {
   postData: PostData;
 }): JSX.Element {
+  const baseClasses = useStyles();
   const classes = postStyles();
 
   return (
@@ -62,6 +64,7 @@ export default function Post({
       <ReactMarkdown
         remarkPlugins={[slug, [headings, { behavior: "wrap" }], footnotes]}
         children={postData.contentMarkdown}
+        className={baseClasses.paragraph}
       />
     </DefaultLayout>
   );

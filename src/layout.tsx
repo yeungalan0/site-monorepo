@@ -61,7 +61,7 @@ export function DefaultGridLayout({
     xs: 12,
     sm: 8,
     md: 6,
-    lg: 4,
+    lg: 6,
     xl: 4,
   },
 }: DefaultGridLayoutProps): JSX.Element {
