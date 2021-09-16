@@ -18,8 +18,6 @@ I'll add to this list as the years go by, but I won't remove/cross off from this
 list without having completed the goal...unless I have a very VERY good reason
 (which will be noted).
 
-I may also visit countries 
-
 # Goals
 
 ## Travel
