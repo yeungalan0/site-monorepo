@@ -1,4 +1,4 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
+import { AppProps } from "next/dist/shared/lib/router/router";
 import React, { useEffect, useState } from "react";
 import { TopBar } from "../src/layout";
 import CustomThemeProvider from "../src/theme-provider";
