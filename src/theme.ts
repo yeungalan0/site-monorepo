@@ -1,4 +1,4 @@
-import { createMuiTheme, ThemeOptions } from "@material-ui/core/styles";
+import { createTheme, ThemeOptions } from "@material-ui/core/styles";
 
 function getThemeOptions(darkThemeActive: boolean): ThemeOptions {
   return {
@@ -8,5 +8,5 @@ function getThemeOptions(darkThemeActive: boolean): ThemeOptions {
   };
 }
 
-export const darkTheme = createMuiTheme(getThemeOptions(true));
-export const lightTheme = createMuiTheme(getThemeOptions(false));
+export const darkTheme = createTheme(getThemeOptions(true));
+export const lightTheme = createTheme(getThemeOptions(false));

@@ -7,13 +7,10 @@
     "plugin:prettier/recommended",
     "prettier/react",
     "prettier/@typescript-eslint",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jest/recommended"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier"],
   "rules": {
     "react/react-in-jsx-scope": "off"
   },

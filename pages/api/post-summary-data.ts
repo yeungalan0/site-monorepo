@@ -23,7 +23,7 @@ export const querySchema: schema = {
   },
 };
 
-export function validateQuery(query: QueryParams, mySchema: schema) {
+export function validateQuery(query: QueryParams, mySchema: schema): Error[] {
   return Object.keys(query)
     .filter(
       (key) =>

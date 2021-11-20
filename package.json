@@ -15,14 +15,18 @@
     "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/styles": "^4.11.3",
+    "@mui/icons-material": "^5.1.1",
+    "@mui/material": "^5.1.1",
     "date-fns": "^2.19.0",
     "gray-matter": "^4.0.2",
-    "next": "^10.0.9",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "next": "^12.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-markdown": "^6.0.1",
     "react-paypal-button-v2": "^2.6.2",
     "remark-autolink-headings": "^6.0.1",
@@ -30,7 +34,7 @@
     "remark-gfm": "^1.0.0",
     "remark-slug": "^6.0.0",
     "swr": "^0.5.4",
-    "webpack": "^4.44.2"
+    "webpack": "^5.64.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",
@@ -41,6 +45,7 @@
     "cypress": "^7.2.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "7.2.0",
+    "eslint-plugin-jest": "^25.2.4",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
