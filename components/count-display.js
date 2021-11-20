@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import styles from "../styles/Home.module.css";

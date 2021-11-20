@@ -4,7 +4,7 @@ import { TopBar } from "../src/layout";
 import CustomThemeProvider from "../src/theme-provider";
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const [style, setStyle] = useState<React.CSSProperties>({
     visibility: "hidden",
   });

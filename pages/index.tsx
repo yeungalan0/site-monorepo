@@ -1,6 +1,16 @@
 import { GetServerSidePropsContext } from "next";
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(
+  context: GetServerSidePropsContext
+): Promise<
+  | {
+      redirect: {
+        permanent: boolean;
+        destination: string;
+      };
+    }
+  | undefined
+> {
   if (context.resolvedUrl === "/") {
     return {
       redirect: {
@@ -11,7 +21,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 }
 
-function IgnoredPage() {
+function IgnoredPage(): JSX.Element {
   return <div></div>;
 }
 
