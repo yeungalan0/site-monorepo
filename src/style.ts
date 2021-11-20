@@ -35,6 +35,13 @@ const useStyles = makeStyles(() => ({
     marginRight: "auto",
     borderRadius: "20%",
   },
+  siteIcon: {
+    fontSize: 60,
+  },
+  siteIconButton: {
+    marginLeft: "1.5em",
+    marginRight: "1.5em",
+  },
 }));
 
 export { useStyles };
