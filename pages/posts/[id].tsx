@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Typography } from "@material-ui/core";
 import ReactMarkdown from "react-markdown";
 // @ts-ignore
@@ -69,9 +70,10 @@ export default function Post({
           remarkFootnotes,
           remarkGfm,
         ]}
-        children={postData.contentMarkdown}
         className={baseClasses.paragraph}
-      />
+      >
+        {postData.contentMarkdown}
+      </ReactMarkdown>
     </DefaultLayout>
   );
 }

@@ -76,12 +76,17 @@ export default function Blog({
       tagsUpdatedRef.current = true;
       setTags(queryParams[FilterKeys.TAGS] ?? []);
     }
+    // Disabling this es lint rule as it makes check boxes do nothing if put in
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
   if (errors.length > 0) {
     // TODO: perhaps redirect to error page with info?
     return (
-      <div>failed to load: "{errors.map((error) => `${error.message}, `)}"</div>
+      <div>
+        failed to load: &quot;{errors.map((error) => `${error.message}, `)}
+        &quot;
+      </div>
     );
   }
 
@@ -124,7 +129,7 @@ function PostsList({
   if (data !== undefined) {
     postData = data;
   } else if (error) {
-    return <div>failed to load: "{error.message}"</div>;
+    return <div>failed to load: &quot;{error.message}&quot;</div>;
   } else if (tagsUpdatedRef.current && !data) {
     return <div>loading...</div>;
   }
@@ -202,6 +207,7 @@ function FilterByTags({
           <MenuItem key={tag} value={tag}>
             <Checkbox
               checked={tags.indexOf(tag) > -1}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               inputProps={{ "data-cy": `blog-tags-filter-box-${tag}` }}
             />
