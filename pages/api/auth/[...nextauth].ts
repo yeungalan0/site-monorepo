@@ -82,10 +82,9 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId:
-        "120141334684-b2k15io8eiahqshk5arvfm26kac8doap.apps.googleusercontent.com",
-      // TODO: secret
-      clientSecret: SECRET,
+      clientId: process.env.NEXT_GOOGLE_LIFE_IN_WEEKS_CLIENT_ID ?? "foo",
+      clientSecret:
+        process.env.NEXT_GOOGLE_LIFE_IN_WEEKS_CLIENT_SECRET ?? "foo",
       authorization: {
         params: {
           scope:
