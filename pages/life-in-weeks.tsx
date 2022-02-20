@@ -106,7 +106,7 @@ export default function LifeInWeeks(): JSX.Element {
 
   if (status === "loading") {
     return <LoadingCircle />;
-  } else if (typeof session.birthdate !== "string") {
+  } else if (typeof session?.birthdate !== "string") {
     return <BirthdateForm />;
   }
 
