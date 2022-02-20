@@ -1,3 +1,5 @@
+import { Box, CircularProgress } from "@mui/material";
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function isEmpty(obj: object): boolean {
   return Object.keys(obj).length === 0;
@@ -25,4 +27,17 @@ export async function fetcher(
   console.log(`STATUS: ${res.status}`);
 
   return res.json();
+}
+
+export function LoadingCircle(): JSX.Element {
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="50vh"
+    >
+      <CircularProgress disableShrink={true} size={70} />
+    </Box>
+  );
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TopBar } from "../src/layout";
 import CustomThemeProvider from "../src/theme-provider";
 import "../styles/globals.css";
+import { SessionProvider } from "next-auth/react";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const [style, setStyle] = useState<React.CSSProperties>({
@@ -22,7 +23,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     <div style={style}>
       <CustomThemeProvider>
         <TopBar />
-        <Component {...pageProps} />
+        <SessionProvider session={pageProps.session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </CustomThemeProvider>
     </div>
   );

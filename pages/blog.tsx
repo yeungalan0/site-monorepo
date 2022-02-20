@@ -208,6 +208,7 @@ function FilterByTags({
           <MenuItem key={tag} value={tag}>
             <Checkbox
               checked={tags.indexOf(tag) > -1}
+              // Ignoring this per: https://github.com/mui-org/material-ui/issues/20160
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               inputProps={{ "data-cy": `blog-tags-filter-box-${tag}` }}
