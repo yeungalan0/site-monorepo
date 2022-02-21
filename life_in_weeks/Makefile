@@ -6,3 +6,13 @@ test-env:
 
 clean:
 	localstack stop
+
+install:
+	pip install localstack
+	npm install
+	sudo npm install -g dynamodb-admin
+	sudo npm install --global cdktf-cli@latest
+	sudo dnf install -y dnf-plugins-core
+	sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+	sudo dnf -y install terraform
+	cdktf get
