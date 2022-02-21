@@ -9,3 +9,9 @@ make test
 ```
 make clean
 ```
+
+# Install dependencies
+
+```
+make install
+```
