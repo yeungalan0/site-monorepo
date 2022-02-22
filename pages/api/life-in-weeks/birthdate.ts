@@ -38,6 +38,7 @@ export default async function handler(
     if (err instanceof BadRequestError) {
       res.status(err.statusCode).json({ message: err.message });
     } else {
+      console.error(err);
       throw err;
     }
   }

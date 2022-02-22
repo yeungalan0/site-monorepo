@@ -29,19 +29,19 @@ import {
 } from "../src/life-in-weeks/definitions";
 
 // TODO: Add stats
-// TODO: Next-auth sign in theme preference
+// TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
 // TODO: Add tests
 // TODO: Properly configure variables
 // TODO: Cleanup code
 // TODO: Female vs. male life expectancy
+// TODO: Create monorepo
+// TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    // const inputVal = birthdateInput?.current?.value ?? "";
 
     const response = await fetch("/api/life-in-weeks/birthdate", {
       method: "POST",

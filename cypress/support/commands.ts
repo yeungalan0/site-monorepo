@@ -25,18 +25,45 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import hkdf from "@panva/hkdf";
+import { EncryptJWT } from "jose";
+
+// Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L113-L121
+async function getDerivedEncryptionKey(secret: string) {
+  return await hkdf(
+    "sha256",
+    secret,
+    "",
+    "NextAuth.js Generated Encryption Key",
+    32
+  );
+}
+
+// Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L16-L25
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export async function encode(token: any, secret: string) {
+  const maxAge = 30 * 24 * 60 * 60; // 30 days
+  const encryptionSecret = await getDerivedEncryptionKey(secret);
+  return await new EncryptJWT(token)
+    .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
+    .setIssuedAt()
+    .setExpirationTime(Date.now() / 1000 + maxAge)
+    .setJti("test")
+    .encrypt(encryptionSecret);
+}
+
 Cypress.Commands.add("login", () => {
   cy.intercept("/api/auth/session", { fixture: "session.json" }).as("session");
 
-  // Set the cookie for cypress.
-  // It has to be a valid cookie so next-auth can decrypt it and confirm its validity.
-  // This step can probably/hopefully be improved.
-  // We are currently unsure about this part.
-  // We need to refresh this cookie once in a while.
-  // We are unsure if this is true and if true, when it needs to be refreshed.
-  cy.setCookie(
-    "next-auth.session-token",
-    "a valid cookie from your browser session"
-  );
+  // Generate and set a valid cookie from the fixture that next-auth can decrypt
+  cy.wrap(null)
+    .then(() => cy.fixture("session.json"))
+    .then((sessionJSON) =>
+      encode(sessionJSON, Cypress.env("NEXTAUTH_JWT_SECRET"))
+    )
+    .then((encryptedToken) =>
+      cy.setCookie("next-auth.session-token", encryptedToken)
+    );
+
   Cypress.Cookies.preserveOnce("next-auth.session-token");
 });

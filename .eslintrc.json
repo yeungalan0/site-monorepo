@@ -19,5 +19,15 @@
   },
   "env": {
     "jest/globals": true
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "jest/expect-expect": "off",
+        "jest/valid-expect": "off",
+        "jest/no-export": "off"
+      }
+    }
+  ]
 }
