@@ -1,5 +1,6 @@
 import { QueryParams } from "../../../pages/api/post-summary-data";
 import { testables, PostData } from "../lib/posts";
+import { expect } from "@jest/globals";
 
 const { applyFilters, getSnippet } = testables;
 

@@ -5,6 +5,7 @@ import {
   validateQuery,
 } from "../../../pages/api/post-summary-data";
 import { VALID_TAGS } from "../constants";
+import { expect } from "@jest/globals";
 
 describe("querySchema", () => {
   test("should return true on valid tags", () => {
