@@ -1,6 +1,9 @@
 name: Cypress and Jest tests
 
-on: [push]
+on:
+  push:
+    paths:
+      - "my_site/**"
 
 jobs:
   cypress-and-jest-run:
@@ -14,6 +17,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          working-directory: "./my_site"
           build: npm run build
           start: npm start
       - uses: actions/upload-artifact@v1
@@ -23,3 +27,4 @@ jobs:
           path: cypress/screenshots
       - name: Jest run
         run: npm run test:jest
+        working-directory: "./my_site"
