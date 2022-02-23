@@ -1,17 +1,17 @@
+# Install dependencies
+
+```
+make install
+```
+
 # Setup test environment
 
 ```
-make test
+make test-env
 ```
 
 # Clean up test environment (should be run automatically on CTRL-C of `make test`)
 
 ```
 make clean
-```
-
-# Install dependencies
-
-```
-make install
 ```

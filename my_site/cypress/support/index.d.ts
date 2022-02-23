@@ -6,6 +6,6 @@ declare namespace Cypress {
      * Custom command to select set session and mock next-auth login during testing
      * @example cy.login()
      */
-    login(): void;
+    login(sessionName: string): void;
   }
 }

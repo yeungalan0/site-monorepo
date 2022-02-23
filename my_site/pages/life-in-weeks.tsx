@@ -70,7 +70,11 @@ function BirthdateForm() {
       justifyContent="center"
       height="50vh"
     >
-      <form onSubmit={handleSubmit} className={classes.birthdateFormStyles}>
+      <form
+        onSubmit={handleSubmit}
+        className={classes.birthdateFormStyles}
+        data-cy="birthdate-form"
+      >
         <Box>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker

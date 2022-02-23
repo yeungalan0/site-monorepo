@@ -8,6 +8,7 @@ on:
 env:
   NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
   NEXTAUTH_URL: "http://localhost:3000"
+  CYPRESS_NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
 
 jobs:
   cypress-and-jest-run:

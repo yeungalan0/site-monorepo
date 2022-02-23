@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../support/index.d.ts" />
 // ***********************************************
 // This example commands.js shows you how to
@@ -52,15 +53,15 @@ export async function encode(token: any, secret: string) {
     .encrypt(encryptionSecret);
 }
 
-Cypress.Commands.add("login", () => {
-  cy.intercept("/api/auth/session", { fixture: "session.json" }).as("session");
+Cypress.Commands.add("login", (sessionName: string) => {
+  cy.intercept("/api/auth/session", { fixture: sessionName }).as("session");
 
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
   cy.wrap(null)
-    .then(() => cy.fixture("session.json"))
-    .then((sessionJSON) =>
-      encode(sessionJSON, Cypress.env("NEXTAUTH_JWT_SECRET"))
-    )
+    .then(() => cy.fixture(sessionName))
+    .then((sessionJSON) => {
+      return encode(sessionJSON, Cypress.env("NEXTAUTH_JWT_SECRET"));
+    })
     .then((encryptedToken) =>
       cy.setCookie("next-auth.session-token", encryptedToken)
     );
