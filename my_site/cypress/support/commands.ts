@@ -48,14 +48,12 @@ export async function encode(token: any, secret: string) {
   return await new EncryptJWT(token)
     .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
     .setIssuedAt()
-    .setExpirationTime(Date.now() / 1000 + maxAge)
+    .setExpirationTime(Math.round(Date.now() / 1000 + maxAge))
     .setJti("test")
     .encrypt(encryptionSecret);
 }
 
 Cypress.Commands.add("login", (sessionName: string) => {
-  cy.intercept("/api/auth/session", { fixture: sessionName }).as("session");
-
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
   cy.wrap(null)
     .then(() => cy.fixture(sessionName))
@@ -65,6 +63,4 @@ Cypress.Commands.add("login", (sessionName: string) => {
     .then((encryptedToken) =>
       cy.setCookie("next-auth.session-token", encryptedToken)
     );
-
-  Cypress.Cookies.preserveOnce("next-auth.session-token");
 });

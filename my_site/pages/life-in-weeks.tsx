@@ -70,11 +70,7 @@ function BirthdateForm() {
       justifyContent="center"
       height="50vh"
     >
-      <form
-        onSubmit={handleSubmit}
-        className={classes.birthdateFormStyles}
-        data-cy="birthdate-form"
-      >
+      <form onSubmit={handleSubmit} className={classes.birthdateFormStyles}>
         <Box>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
@@ -83,7 +79,9 @@ function BirthdateForm() {
               onChange={(newValue) => {
                 setBirthdateInput(newValue);
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => (
+                <TextField data-cy="birthdate-form-text-field" {...params} />
+              )}
             />
           </LocalizationProvider>
         </Box>
@@ -94,6 +92,7 @@ function BirthdateForm() {
             birthdateInput === null ||
             !isValidDate(birthdateInput.toLocaleDateString("en-US"))
           }
+          data-cy="birthdate-form-submit"
         >
           Submit
         </Button>
