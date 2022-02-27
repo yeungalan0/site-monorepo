@@ -9,7 +9,7 @@ clean:
 
 github-test-env:
 	npm install
-	$(npm bin)/cdktf deploy --auto-approve
+	npx cdktf deploy --auto-approve
 
 install:
 	pip install localstack
