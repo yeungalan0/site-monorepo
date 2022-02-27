@@ -1,4 +1,3 @@
-# Note: Not using cdktf deploy
 test-env: 
 	bash -c "trap 'make clean' EXIT && \
 	SERVICES=dynamodb,sts localstack start -d && \
@@ -10,7 +9,8 @@ clean:
 
 github-test-env:
 	npm install
-	npx cdktf deploy --auto-approve
+	npx cdktf synth
+	cd cdktf.out/stacks/life_in_weeks && rm -rf .terraform && terraform init && terraform apply -auto-approve
 
 install:
 	pip install localstack
