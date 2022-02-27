@@ -21,7 +21,8 @@
       "command": "make test-env",
       "options": {
         "cwd": "infra/life_in_weeks"
-      }
+      },
+      "problemMatcher": []
     }
   ]
 }
