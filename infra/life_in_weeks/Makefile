@@ -9,6 +9,7 @@ clean:
 
 github-test-env:
 	npm install
+	npx cdktf get
 	npx cdktf deploy --auto-approve
 
 install:
