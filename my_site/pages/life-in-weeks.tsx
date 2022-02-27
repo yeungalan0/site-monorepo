@@ -124,7 +124,7 @@ export default function LifeInWeeks(): JSX.Element {
       {} */}
       <Button onClick={() => signOut()}>Sign out</Button>
       <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
-        <Table stickyHeader aria-label="simple table">
+        <Table stickyHeader aria-label="simple table" data-cy="liw-table">
           <TableHead>
             <TableRow>{columns}</TableRow>
           </TableHead>
@@ -169,6 +169,8 @@ function getRows(
   let cellDate = birthday;
   const nowInMillis = Date.now();
 
+  // console.log(`NOW: ${new Date().toLocaleDateString("en-US")}`); // Save for testing
+
   const getCellSettings = (currentCellDate: Date, nextDate: Date) => {
     // Default settings if it is a past time range
     let disabled: boolean | undefined = false;
@@ -205,10 +207,11 @@ function getRows(
 
     for (let i = 0; i < weeks; i++) {
       // Set the next date to work with
-      if (i + 1 < weeks) {
+      if (i < WEEKS_PER_YEAR - 1) {
+        // For 51 weeks, add a week to the next date
         cellDate = addWeeks(cellDate, 1);
       } else {
-        // Last loop, set to start of a new row
+        // Done with row, set to start of a new row
         cellDate = addYears(birthday, yearsLived + 1);
       }
 

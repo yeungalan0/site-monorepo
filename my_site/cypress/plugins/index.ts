@@ -16,8 +16,6 @@ import {
   resetNextAuthTable,
   seedNextAuthTable,
 } from "../../src/life-in-weeks/utils";
-import * as fs from "fs";
-import * as path from "path";
 
 /**
  * @type {Cypress.PluginConfig}
@@ -30,12 +28,8 @@ module.exports = (on) => {
     "db:reset": () => {
       return resetNextAuthTable();
     },
-    "db:seed": (sessionName: string) => {
-      const jsonPath = path.join(__dirname, `../fixtures/${sessionName}`);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const session = JSON.parse(fs.readFileSync(jsonPath));
-      return seedNextAuthTable(session);
+    "db:seed": (userObj: Record<string, string>) => {
+      return seedNextAuthTable(userObj);
     },
   });
 };

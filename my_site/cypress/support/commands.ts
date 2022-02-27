@@ -27,7 +27,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import hkdf from "@panva/hkdf";
-import { EncryptJWT } from "jose";
+import { EncryptJWT, JWTPayload } from "jose";
 
 // Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L113-L121
 async function getDerivedEncryptionKey(secret: string) {
@@ -41,8 +41,10 @@ async function getDerivedEncryptionKey(secret: string) {
 }
 
 // Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L16-L25
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function encode(token: any, secret: string) {
+export async function encode(
+  token: JWTPayload,
+  secret: string
+): Promise<string> {
   const maxAge = 30 * 24 * 60 * 60; // 30 days
   const encryptionSecret = await getDerivedEncryptionKey(secret);
   return await new EncryptJWT(token)
@@ -53,12 +55,11 @@ export async function encode(token: any, secret: string) {
     .encrypt(encryptionSecret);
 }
 
-Cypress.Commands.add("login", (sessionName: string) => {
+Cypress.Commands.add("login", (userObj: JWTPayload) => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
   cy.wrap(null)
-    .then(() => cy.fixture(sessionName))
-    .then((sessionJSON) => {
-      return encode(sessionJSON, Cypress.env("NEXTAUTH_JWT_SECRET"));
+    .then(() => {
+      return encode(userObj, Cypress.env("NEXTAUTH_JWT_SECRET"));
     })
     .then((encryptedToken) =>
       cy.setCookie("next-auth.session-token", encryptedToken)

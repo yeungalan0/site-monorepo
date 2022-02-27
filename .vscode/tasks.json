@@ -1,19 +1,27 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "dev",
-			"problemMatcher": [],
-			"label": "npm: dev",
-			"detail": "next dev"
-		},
-		{
-			"type": "npm",
-			"script": "debug",
-			"problemMatcher": [],
-			"label": "npm: debug",
-			"detail": "next debug"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "label": "npm: dev",
+      "detail": "next dev"
+    },
+    {
+      "type": "npm",
+      "script": "debug",
+      "problemMatcher": [],
+      "label": "npm: debug",
+      "detail": "next debug"
+    },
+    {
+      "label": "standup test-env life-in-weeks",
+      "type": "shell",
+      "command": "make test-env",
+      "options": {
+        "cwd": "infra/life_in_weeks"
+      }
+    }
+  ]
 }
