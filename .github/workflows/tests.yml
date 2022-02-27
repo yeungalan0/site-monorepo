@@ -33,7 +33,7 @@ jobs:
           node-version: "14"
       - name: Deploy infra
         run: "make github-test-env"
-        working-directory: "./infra/life-in-weeks"
+        working-directory: "./infra/life_in_weeks"
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
