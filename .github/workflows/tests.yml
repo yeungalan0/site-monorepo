@@ -37,13 +37,14 @@ jobs:
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
+        id: cypress-run
         uses: cypress-io/github-action@v2
         with:
           working-directory: "./my_site"
           build: npm run build
           start: npm start
       - uses: actions/upload-artifact@v1
-        if: failure()
+        if: steps.cypress-run.outcome != 'success'
         with:
           name: cypress-screenshots
           path: cypress/screenshots

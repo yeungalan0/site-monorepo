@@ -9,8 +9,8 @@ clean:
 
 github-test-env:
 	npm install
-	npx cdktf get
-	npx cdktf deploy --auto-approve
+	npx cdktf synth
+	cd cdktf.out/stacks/repos && rm -rf .terraform && terraform init && terraform apply -auto-approve
 
 install:
 	pip install localstack

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { App, TerraformStack } from "cdktf";
-import { AwsProvider, dynamodb } from "./.gen/providers/aws";
+import { AwsProvider, dynamodb } from "@cdktf/provider-aws";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
