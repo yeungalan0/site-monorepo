@@ -44,7 +44,7 @@ jobs:
           build: npm run build
           start: npm start
       - uses: actions/upload-artifact@v1
-        if: steps.cypress-run.outcome != 'success'
+        if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
