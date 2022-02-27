@@ -30,7 +30,7 @@ jobs:
           terraform_version: 1.1.6
       - uses: actions/setup-node@v1
         with:
-          node-version: "15"
+          node-version: "16"
       - name: Deploy infra
         run: "make github-test-env"
         working-directory: "./infra/life_in_weeks"
