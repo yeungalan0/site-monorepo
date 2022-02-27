@@ -1,9 +1,6 @@
 name: Cypress and Jest tests
 
-on:
-  push:
-    paths:
-      - "my_site/**"
+on: push
 
 env:
   NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
