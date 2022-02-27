@@ -7,6 +7,10 @@ test-env:
 clean:
 	localstack stop
 
+github-test-env:
+	npm install
+	$(npm bin)/cdktf deploy --auto-approve
+
 install:
 	pip install localstack
 	npm install

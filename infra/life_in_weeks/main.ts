@@ -10,8 +10,9 @@ class MyStack extends TerraformStack {
       region: "us-east-1",
       endpoints: [
         {
-          dynamodb: "http://localhost:4566",
-          sts: "http://localhost:4566",
+          dynamodb:
+            process.env.NEXT_AUTH_DYNAMO_ENDPOINT ?? "http://localhost:4566",
+          sts: process.env.NEXT_AUTH_STS_ENDPOINT ?? "http://localhost:4566",
         },
       ],
     });

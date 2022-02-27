@@ -9,9 +9,40 @@ env:
   NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
   NEXTAUTH_URL: "http://localhost:3000"
   CYPRESS_NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
+  DEFAULT_REGION: us-east-1
+  AWS_ACCESS_KEY_ID: test
+  AWS_SECRET_ACCESS_KEY: test
 
 jobs:
+  localstack:
+    runs-on: ubuntu-latest
+    services:
+      localstack:
+        image: localstack/localstack:0.14.0
+        env:
+          SERVICES: dynamodb,sts
+        ports:
+          - 4566:4566
+
+  setup-test-env:
+    needs: localstack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.6
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - name: Deploy infra
+        run: "make github-test-env"
+        working-directory: "./infra"
+
   cypress-and-jest-run:
+    needs: setup-test-env
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
