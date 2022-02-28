@@ -30,12 +30,12 @@ import {
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
-// TODO: Add tests
 // TODO: Properly configure variables
-// TODO: Cleanup code
 // TODO: Female vs. male life expectancy
-// TODO: Create monorepo
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
+// TODO: Pre-commit
+// TODO: Setup vercel deployment
+// TODO: Update packages
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);

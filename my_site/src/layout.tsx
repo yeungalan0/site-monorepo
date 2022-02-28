@@ -38,9 +38,10 @@ type CustomGridSizes = {
   xl: GridSize | false;
 };
 
-function getEdgeSizes(
-  contentSize: GridSize | false
-): { leftEdge: GridSize | false; rightEdge: GridSize | false } {
+function getEdgeSizes(contentSize: GridSize | false): {
+  leftEdge: GridSize | false;
+  rightEdge: GridSize | false;
+} {
   let leftEdge: GridSize | false = Math.floor(
     (12 - (contentSize as number)) / 2
   ) as GridSize;
