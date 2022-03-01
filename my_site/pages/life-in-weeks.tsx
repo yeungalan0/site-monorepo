@@ -33,9 +33,7 @@ import {
 // TODO: Properly configure variables
 // TODO: Female vs. male life expectancy
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
-// TODO: Pre-commit
 // TODO: Setup vercel deployment
-// TODO: Update packages
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
