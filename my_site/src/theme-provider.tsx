@@ -28,9 +28,9 @@ type SelectedTheme = {
   appliedTheme: Theme;
 };
 
-const themeStorageKey = "theme";
+export const themeStorageKey = "theme";
 
-enum ThemeName {
+export enum ThemeName {
   DARK_THEME = "darkTheme",
   LIGHT_THEME = "lightTheme",
 }

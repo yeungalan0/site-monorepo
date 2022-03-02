@@ -30,7 +30,7 @@ import {
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
-// TODO: Properly configure variables
+// TODO: Properly configure pipeline environment variables
 // TODO: Female vs. male life expectancy
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
 // TODO: Setup vercel deployment
