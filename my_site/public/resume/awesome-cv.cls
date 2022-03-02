@@ -10,7 +10,7 @@
 %
 % Notes:
 % 1) This class file defines the structure and layout of the template file (cv.tex, resume.tex).
-% 2) It has been written in such a way that under most circumstances you 
+% 2) It has been written in such a way that under most circumstances you
 % should not need to edit it.
 %
 % Class license:
@@ -486,7 +486,7 @@
   \fancyfoot{}
   \fancyfoot[L]{\footerstyle{#1}}
   \fancyfoot[C]{\footerstyle{#2}}
-  \fancyfoot[R]{\footerstyle{#3}} 
+  \fancyfoot[R]{\footerstyle{#3}}
 }
 
 % Define a section for CV
@@ -641,7 +641,7 @@
   \ifthenelse{\isundefined{\@lettertitle}}
     {}
     {\lettertitlestyle{\@lettertitle} \\}
-  \lettertextstyle{\@letteropening} 
+  \lettertextstyle{\@letteropening}
 }
 
 % Define a closing of the cover letter

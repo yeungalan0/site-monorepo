@@ -2,20 +2,20 @@ import {
   AppBar,
   Grid,
   GridSize,
+  IconButton,
   Slide,
-  Switch,
   Toolbar,
   Tooltip,
   Typography,
   useScrollTrigger,
 } from "@mui/material";
-import Brightness2Icon from "@mui/icons-material/Brightness2";
-import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment, ReactElement, useContext } from "react";
 import { useStyles } from "./style";
 import { ToggleThemeContext } from "./theme-provider";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
@@ -38,9 +38,10 @@ type CustomGridSizes = {
   xl: GridSize | false;
 };
 
-function getEdgeSizes(
-  contentSize: GridSize | false
-): { leftEdge: GridSize | false; rightEdge: GridSize | false } {
+function getEdgeSizes(contentSize: GridSize | false): {
+  leftEdge: GridSize | false;
+  rightEdge: GridSize | false;
+} {
   let leftEdge: GridSize | false = Math.floor(
     (12 - (contentSize as number)) / 2
   ) as GridSize;
@@ -227,17 +228,14 @@ export function TopBar(): JSX.Element {
               </Link>
             </Typography>
             <Tooltip title="Toggle Theme">
-              <Switch
-                checked={darkThemeActive}
-                onChange={toggleTheme}
-                icon={<WbSunnyIcon fontSize="small" />}
-                checkedIcon={<Brightness2Icon fontSize="small" />}
-                color="default"
-                // Ignoring this per: https://github.com/mui-org/material-ui/issues/20160
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                inputProps={{ "data-cy": "top-bar-toggle-theme" }}
-              />
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={toggleTheme}
+                color="inherit"
+                data-cy="top-bar-toggle-theme"
+              >
+                {darkThemeActive ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
             </Tooltip>
           </Toolbar>
         </DefaultGridLayout>

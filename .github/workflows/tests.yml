@@ -1,25 +1,43 @@
 name: Cypress and Jest tests
 
-on:
-  push:
-    paths:
-      - "my_site/**"
+on: push
 
 env:
   NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
   NEXTAUTH_URL: "http://localhost:3000"
   CYPRESS_NEXTAUTH_JWT_SECRET: "shhhhhhh-this-is-the-testing-secret"
+  DEFAULT_REGION: us-east-1
+  AWS_ACCESS_KEY_ID: test
+  AWS_SECRET_ACCESS_KEY: test
 
 jobs:
   cypress-and-jest-run:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      localstack:
+        image: localstack/localstack:0.14.0
+        env:
+          SERVICES: dynamodb,sts
+        ports:
+          - 4566:4566
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.6
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "16"
+      - name: Deploy infra
+        run: "make github-test-env"
+        working-directory: "./infra/life_in_weeks"
       # Install NPM dependencies, cache them correctly
       # and run all Cypress tests
       - name: Cypress run
+        id: cypress-run
         uses: cypress-io/github-action@v2
         with:
           working-directory: "./my_site"

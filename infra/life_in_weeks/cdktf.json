@@ -2,7 +2,7 @@
   "language": "typescript",
   "app": "npx ts-node main.ts",
   "projectId": "6b33e21e-f748-43af-a1c4-0cfc17e379b5",
-  "terraformProviders": ["aws@~> 4.0.0"],
+  "terraformProviders": [],
   "terraformModules": [],
   "context": {
     "excludeStackIdFromLogicalIds": "true",

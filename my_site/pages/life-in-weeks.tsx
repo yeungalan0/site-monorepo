@@ -30,12 +30,10 @@ import {
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
-// TODO: Add tests
-// TODO: Properly configure variables
-// TODO: Cleanup code
+// TODO: Properly configure pipeline environment variables
 // TODO: Female vs. male life expectancy
-// TODO: Create monorepo
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
+// TODO: Setup vercel deployment
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
@@ -70,11 +68,7 @@ function BirthdateForm() {
       justifyContent="center"
       height="50vh"
     >
-      <form
-        onSubmit={handleSubmit}
-        className={classes.birthdateFormStyles}
-        data-cy="birthdate-form"
-      >
+      <form onSubmit={handleSubmit} className={classes.birthdateFormStyles}>
         <Box>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
@@ -83,7 +77,9 @@ function BirthdateForm() {
               onChange={(newValue) => {
                 setBirthdateInput(newValue);
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => (
+                <TextField data-cy="birthdate-form-text-field" {...params} />
+              )}
             />
           </LocalizationProvider>
         </Box>
@@ -94,6 +90,7 @@ function BirthdateForm() {
             birthdateInput === null ||
             !isValidDate(birthdateInput.toLocaleDateString("en-US"))
           }
+          data-cy="birthdate-form-submit"
         >
           Submit
         </Button>
@@ -125,7 +122,7 @@ export default function LifeInWeeks(): JSX.Element {
       {} */}
       <Button onClick={() => signOut()}>Sign out</Button>
       <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
-        <Table stickyHeader aria-label="simple table">
+        <Table stickyHeader aria-label="simple table" data-cy="liw-table">
           <TableHead>
             <TableRow>{columns}</TableRow>
           </TableHead>
@@ -170,6 +167,8 @@ function getRows(
   let cellDate = birthday;
   const nowInMillis = Date.now();
 
+  // console.log(`NOW: ${new Date().toLocaleDateString("en-US")}`); // Save for testing
+
   const getCellSettings = (currentCellDate: Date, nextDate: Date) => {
     // Default settings if it is a past time range
     let disabled: boolean | undefined = false;
@@ -206,10 +205,11 @@ function getRows(
 
     for (let i = 0; i < weeks; i++) {
       // Set the next date to work with
-      if (i + 1 < weeks) {
+      if (i < WEEKS_PER_YEAR - 1) {
+        // For 51 weeks, add a week to the next date
         cellDate = addWeeks(cellDate, 1);
       } else {
-        // Last loop, set to start of a new row
+        // Done with row, set to start of a new row
         cellDate = addYears(birthday, yearsLived + 1);
       }
 

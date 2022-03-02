@@ -1,4 +1,9 @@
-import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDB,
+  DynamoDBClientConfig,
+  CreateTableCommandInput,
+  DeleteTableCommandInput,
+} from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBAdapter } from "@next-auth/dynamodb-adapter";
 import { Adapter } from "next-auth/adapters";
@@ -8,9 +13,11 @@ const config: DynamoDBClientConfig = {
     accessKeyId: (process.env.NEXT_AUTH_AWS_ACCESS_KEY as string) ?? "foo",
     secretAccessKey: (process.env.NEXT_AUTH_AWS_SECRET_KEY as string) ?? "foo",
   },
-  region: process.env.NEXT_AUTH_AWS_REGION,
-  endpoint: "http://localhost:4566",
+  region: process.env.NEXT_AUTH_AWS_REGION ?? "us-east-1",
+  endpoint: process.env.NEXT_AUTH_DYNAMO_ENDPOINT ?? "http://localhost:4566",
 };
+
+const dynamoDB = new DynamoDB(config);
 
 const dynamoClient = DynamoDBDocument.from(new DynamoDB(config), {
   marshallOptions: {
@@ -37,4 +44,66 @@ export function isValidDate(s: string): boolean {
     d.getDate() === parts[1] &&
     d.getFullYear() === parts[2]
   );
+}
+
+// Test functions
+async function createNextAuthTable() {
+  const params: CreateTableCommandInput = {
+    TableName: "next-auth",
+    KeySchema: [
+      { AttributeName: "pk", KeyType: "HASH" },
+      { AttributeName: "sk", KeyType: "RANGE" },
+    ],
+    AttributeDefinitions: [
+      { AttributeName: "pk", AttributeType: "S" },
+      { AttributeName: "sk", AttributeType: "S" },
+      { AttributeName: "GSI1PK", AttributeType: "S" },
+      { AttributeName: "GSI1SK", AttributeType: "S" },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 10,
+      WriteCapacityUnits: 10,
+    },
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: "GSI1",
+        KeySchema: [
+          { AttributeName: "GSI1PK", KeyType: "HASH" },
+          { AttributeName: "GSI1SK", KeyType: "RANGE" },
+        ],
+        Projection: { ProjectionType: "ALL" },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 10,
+          WriteCapacityUnits: 10,
+        },
+      },
+    ],
+  };
+  return dynamoDB.createTable(params);
+}
+
+async function deleteNextAuthTable() {
+  const params: DeleteTableCommandInput = {
+    TableName: "next-auth",
+  };
+  return dynamoDB.deleteTable(params);
+}
+
+export async function resetNextAuthTable(): Promise<null> {
+  try {
+    await deleteNextAuthTable();
+  } catch (e) {
+    if (!(e instanceof Error) || e.name !== "ResourceNotFoundException") {
+      throw e;
+    }
+  }
+  await createNextAuthTable();
+  return null;
+}
+
+export async function seedNextAuthTable(
+  userObject: Record<string, string>
+): Promise<null> {
+  await dynamoAdapter.createUser({ ...userObject });
+  return null;
 }

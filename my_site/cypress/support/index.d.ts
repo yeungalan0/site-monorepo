@@ -1,11 +1,14 @@
 /// <reference types="cypress" />
+import { JWTPayload } from "jose";
 
-declare namespace Cypress {
-  interface Chainable {
-    /**
-     * Custom command to select set session and mock next-auth login during testing
-     * @example cy.login()
-     */
-    login(sessionName: string): void;
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      /**
+       * Custom command to set cookie and mock next-auth login during testing
+       * @example cy.login(<USER_OBJECT>)
+       */
+      login(userObj: JWTPayload): Chainable<Element>;
+    }
   }
 }
