@@ -1,20 +1,44 @@
 import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
+import { App, S3Backend, TerraformStack } from "cdktf";
 import { AwsProvider, dynamodb } from "@cdktf/provider-aws";
-
+import {
+  DEFAULT_REGION,
+  getEndpoints,
+  TERRAFORM_BUCKET,
+  TERRAFORM_DYNAMODB_TABLE,
+} from "../definitions";
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
+    const isTestEnv = process.env.ENVIRONMENT === "TEST";
+    const myEndpoints = getEndpoints(isTestEnv);
+
+    if (!isTestEnv) {
+      const backendTestProps = isTestEnv
+        ? {
+            skipCredentialsValidation: true,
+            forcePathStyle: true,
+            endpoint: myEndpoints![0].s3,
+            iamEndpoint: myEndpoints![0].iam,
+            dynamodbEndpoint: myEndpoints![0].dynamodb,
+            stsEndpoint: myEndpoints![0].sts,
+          }
+        : {};
+
+      new S3Backend(this, {
+        bucket: TERRAFORM_BUCKET,
+        region: DEFAULT_REGION,
+        key: "terraform.tfstate",
+        dynamodbTable: TERRAFORM_DYNAMODB_TABLE,
+        ...backendTestProps,
+      });
+    }
+
     new AwsProvider(this, "aws", {
-      region: "us-east-1",
-      endpoints: [
-        {
-          dynamodb:
-            process.env.NEXT_AUTH_DYNAMO_ENDPOINT ?? "http://localhost:4566",
-          sts: process.env.NEXT_AUTH_STS_ENDPOINT ?? "http://localhost:4566",
-        },
-      ],
+      region: DEFAULT_REGION,
+      endpoints: myEndpoints,
+      skipCredentialsValidation: isTestEnv,
     });
 
     new dynamodb.DynamodbTable(this, `NextAuthTable`, {

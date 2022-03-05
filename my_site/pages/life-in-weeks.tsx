@@ -33,7 +33,7 @@ import {
 // TODO: Properly configure pipeline environment variables
 // TODO: Female vs. male life expectancy
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
-// TODO: Setup vercel deployment
+// TODO: Setup AWS deployment
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
