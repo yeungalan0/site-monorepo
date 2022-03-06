@@ -4,6 +4,7 @@ import { AwsProvider, dynamodb } from "@cdktf/provider-aws";
 import {
   DEFAULT_REGION,
   getEndpoints,
+  isTestEnv,
   TERRAFORM_BUCKET,
   TERRAFORM_DYNAMODB_TABLE,
 } from "../definitions";
@@ -11,32 +12,19 @@ class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
-    const isTestEnv = process.env.ENVIRONMENT === "TEST";
-    const myEndpoints = getEndpoints(isTestEnv);
+    const myEndpoints = getEndpoints();
 
     if (!isTestEnv) {
-      const backendTestProps = isTestEnv
-        ? {
-            skipCredentialsValidation: true,
-            forcePathStyle: true,
-            endpoint: myEndpoints![0].s3,
-            iamEndpoint: myEndpoints![0].iam,
-            dynamodbEndpoint: myEndpoints![0].dynamodb,
-            stsEndpoint: myEndpoints![0].sts,
-          }
-        : {};
-
       new S3Backend(this, {
         bucket: TERRAFORM_BUCKET,
-        region: DEFAULT_REGION,
+        region: process.env.AWS_REGION ?? DEFAULT_REGION,
         key: "terraform.tfstate",
         dynamodbTable: TERRAFORM_DYNAMODB_TABLE,
-        ...backendTestProps,
       });
     }
 
     new AwsProvider(this, "aws", {
-      region: DEFAULT_REGION,
+      region: process.env.AWS_REGION ?? DEFAULT_REGION,
       endpoints: myEndpoints,
       skipCredentialsValidation: isTestEnv,
     });
@@ -46,7 +34,7 @@ class MyStack extends TerraformStack {
       hashKey: "pk",
       rangeKey: "sk",
       ttl: { enabled: true, attributeName: "expires" },
-      readCapacity: 10, // TODO
+      readCapacity: 10,
       writeCapacity: 10,
       globalSecondaryIndex: [
         {

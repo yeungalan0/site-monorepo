@@ -7,14 +7,14 @@ import {
   TERRAFORM_DYNAMODB_TABLE,
   TERRAFORM_USER,
   getEndpoints,
+  isTestEnv,
 } from "../definitions";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
-    const isTestEnv = process.env.ENVIRONMENT === "TEST";
-    const myEndpoints = getEndpoints(isTestEnv);
+    const myEndpoints = getEndpoints();
 
     // Needed to set s3ForcePathStyle to avoid this bug with localstack: https://github.com/localstack/localstack/issues/5566
     new AwsProvider(this, "aws", {
