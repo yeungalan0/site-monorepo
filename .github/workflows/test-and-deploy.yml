@@ -18,7 +18,7 @@ jobs:
       localstack:
         image: localstack/localstack:0.14.0
         env:
-          SERVICES: dynamodb,sts
+          SERVICES: dynamodb,sts,s3,iam
         ports:
           - 4566:4566
     steps:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "16"
-      - name: Deploy infra
+      - name: Deploy test infra
         run: "make github-deploy-env"
         working-directory: "./infra/life_in_weeks"
       # Install NPM dependencies, cache them correctly
