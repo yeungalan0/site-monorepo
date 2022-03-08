@@ -28,7 +28,7 @@ export function getEndpoints() {
       },
     ];
   } else {
-    console.log("Using standard config...");
+    console.log(`Using standard config for ${env}...`);
   }
 
   return myEndpoints;
