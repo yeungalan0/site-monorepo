@@ -4,6 +4,8 @@ export const AVERAGE_LIFE_EXPECTANCY_MALE = 76.3;
 
 export const CELL_WIDTH = ".75%";
 
+export const TEST_ENV = "test";
+
 export type PeopleData = {
   resourceName: string;
   etag: string;

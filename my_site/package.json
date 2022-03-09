@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "ENVIRONMENT=test next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -11,8 +11,8 @@
     "test:jest": "jest",
     "test:cy": "cypress run",
     "test": "npm run test:jest && npm run test:cy",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:open": "ENVIRONMENT=test cypress open",
+    "cypress:run": "ENVIRONMENT=test cypress run"
   },
   "dependencies": {
     "@emotion/react": "^11.8.1",
