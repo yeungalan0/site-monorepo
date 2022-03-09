@@ -2,6 +2,7 @@ test-env:
 	bash -c "trap 'make clean' EXIT && \
 	export ENVIRONMENT=test AWS_REGION=us-west-2 && \
 	SERVICES=dynamodb,s3,sts,iam localstack start -d && \
+	rm -rf cdktf.out/ terraform.life_in_weeks.tfstate && \
 	cdktf deploy --auto-approve && \
 	DYNAMO_ENDPOINT=http://localhost:4566 dynamodb-admin"
 

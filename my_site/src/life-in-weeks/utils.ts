@@ -7,14 +7,30 @@ import {
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBAdapter } from "@next-auth/dynamodb-adapter";
 import { Adapter } from "next-auth/adapters";
+import { TEST_ENV } from "./definitions";
+
+const dynamoConfig =
+  process.env.ENVIRONMENT == TEST_ENV
+    ? {
+        accessKeyId: "foo",
+        secretAccessKey: "foo",
+        region: "us-west-2",
+        endpoint: "http://localhost:4566",
+      }
+    : {
+        accessKeyId: process.env.NEXT_AUTH_AWS_ACCESS_KEY as string,
+        secretAccessKey: process.env.NEXT_AUTH_AWS_SECRET_KEY as string,
+        region: process.env.NEXT_AUTH_AWS_REGION ?? "us-west-2",
+        endpoint: undefined,
+      };
 
 const config: DynamoDBClientConfig = {
   credentials: {
-    accessKeyId: (process.env.NEXT_AUTH_AWS_ACCESS_KEY as string) ?? "foo",
-    secretAccessKey: (process.env.NEXT_AUTH_AWS_SECRET_KEY as string) ?? "foo",
+    accessKeyId: dynamoConfig.accessKeyId,
+    secretAccessKey: dynamoConfig.secretAccessKey,
   },
-  region: process.env.NEXT_AUTH_AWS_REGION ?? "us-west-2",
-  endpoint: process.env.NEXT_AUTH_DYNAMO_ENDPOINT ?? "http://localhost:4566",
+  region: dynamoConfig.region,
+  endpoint: dynamoConfig.endpoint,
 };
 
 const dynamoDB = new DynamoDB(config);

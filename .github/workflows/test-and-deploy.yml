@@ -74,9 +74,11 @@ jobs:
         run: "make github-deploy-env"
         working-directory: "./infra/life_in_weeks"
         env:
-          AWS_ACCESS_KEY_ID: "${{ github.ref == 'refs/heads/main' &&
+          AWS_ACCESS_KEY_ID:
+            "${{ github.ref == 'refs/heads/main' &&
             secrets.AWS_ACCESS_KEY_ID_PROD || secrets.AWS_ACCESS_KEY_ID_DEV }}"
-          AWS_SECRET_ACCESS_KEY: "${{ github.ref == 'refs/heads/main' &&
+          AWS_SECRET_ACCESS_KEY:
+            "${{ github.ref == 'refs/heads/main' &&
             secrets.AWS_SECRET_ACCESS_KEY_PROD ||
             secrets.AWS_SECRET_ACCESS_KEY_DEV }}"
           AWS_REGION: "us-west-2"
