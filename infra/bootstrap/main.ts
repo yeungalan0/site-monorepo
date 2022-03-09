@@ -8,6 +8,7 @@ import {
   TERRAFORM_USER,
   getEndpoints,
   isTestEnv,
+  NEXT_AUTH_DYNAMODB_TABLE,
 } from "../definitions";
 
 class MyStack extends TerraformStack {
@@ -74,6 +75,13 @@ class MyStack extends TerraformStack {
         "dynamodb:DeleteItem" \
       ], \
       "Resource": "arn:aws:dynamodb:*:*:table/${TERRAFORM_DYNAMODB_TABLE}" \
+    }, \
+    { \
+      "Effect": "Allow", \
+      "Action": [ \
+        "dynamodb:*" \
+      ], \
+      "Resource": "arn:aws:dynamodb:*:*:table/${NEXT_AUTH_DYNAMODB_TABLE}" \
     } \
   ] \
 }`,

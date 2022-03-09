@@ -13,7 +13,7 @@ const config: DynamoDBClientConfig = {
     accessKeyId: (process.env.NEXT_AUTH_AWS_ACCESS_KEY as string) ?? "foo",
     secretAccessKey: (process.env.NEXT_AUTH_AWS_SECRET_KEY as string) ?? "foo",
   },
-  region: process.env.NEXT_AUTH_AWS_REGION ?? "us-east-1",
+  region: process.env.NEXT_AUTH_AWS_REGION ?? "us-west-2",
   endpoint: process.env.NEXT_AUTH_DYNAMO_ENDPOINT ?? "http://localhost:4566",
 };
 

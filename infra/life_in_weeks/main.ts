@@ -5,6 +5,7 @@ import {
   DEFAULT_REGION,
   getEndpoints,
   isTestEnv,
+  NEXT_AUTH_DYNAMODB_TABLE,
   TERRAFORM_BUCKET,
   TERRAFORM_DYNAMODB_TABLE,
 } from "../definitions";
@@ -30,7 +31,7 @@ class MyStack extends TerraformStack {
     });
 
     new dynamodb.DynamodbTable(this, `NextAuthTable`, {
-      name: "next-auth",
+      name: NEXT_AUTH_DYNAMODB_TABLE,
       hashKey: "pk",
       rangeKey: "sk",
       ttl: { enabled: true, attributeName: "expires" },

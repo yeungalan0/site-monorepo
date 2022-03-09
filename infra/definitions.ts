@@ -2,6 +2,7 @@ const env = getEnv();
 export const TERRAFORM_BUCKET = `yeungco-terraform-backend-${env}`;
 export const TERRAFORM_DYNAMODB_TABLE = `terraform_state_${env}`;
 export const TERRAFORM_USER = `terraform-user-${env}`;
+export const NEXT_AUTH_DYNAMODB_TABLE = "next-auth";
 export const DEFAULT_REGION = "us-west-2";
 export const isTestEnv = env === "test";
 

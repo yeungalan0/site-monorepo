@@ -19,7 +19,8 @@ yet exist.
    rm -rf cdktf.out terraform.bootstrap.tfstate
    ```
 1. Set the `AWS_PROFILE` environment variable to the AWS credentials profile you
-   would like to deploy to
+   would like to deploy to and set `ENVIRONMENT` to the environment you're
+   deploying to
 1. Run the deployment command and ensure the plan looks correct
    ```
    cdktf deploy
