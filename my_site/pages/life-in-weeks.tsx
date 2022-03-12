@@ -30,10 +30,10 @@ import {
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
-// TODO: Properly configure pipeline environment variables
 // TODO: Female vs. male life expectancy
 // TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
-// TODO: Setup AWS deployment
+// TODO: Look into replacing make with tasks
+// TODO: test sign out button
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
@@ -120,7 +120,7 @@ export default function LifeInWeeks(): JSX.Element {
       {JSON.stringify(session)}
       <br />
       {} */}
-      <Button onClick={() => signOut()}>Sign out</Button>
+      {/* <Button onClick={() => signOut()}>Sign out</Button> */}
       <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
         <Table stickyHeader aria-label="simple table" data-cy="liw-table">
           <TableHead>

@@ -81,7 +81,8 @@ class MyStack extends TerraformStack {
       "Action": [ \
         "dynamodb:*" \
       ], \
-      "Resource": "arn:aws:dynamodb:*:*:table/${NEXT_AUTH_DYNAMODB_TABLE}" \
+      "Resource": ["arn:aws:dynamodb:*:*:table/${NEXT_AUTH_DYNAMODB_TABLE}", \
+                   "arn:aws:dynamodb:*:*:table/${NEXT_AUTH_DYNAMODB_TABLE}/*"] \
     } \
   ] \
 }`,
