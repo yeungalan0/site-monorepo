@@ -122,12 +122,18 @@ export default function LifeInWeeks(): JSX.Element {
     <>
       <Box justifyContent="center" alignItems="center" display="flex">
         <Tooltip title="Table view">
-          <IconButton onClick={() => setDisplayType(DisplayType.TABLE)}>
+          <IconButton
+            onClick={() => setDisplayType(DisplayType.TABLE)}
+            disabled={displayType === DisplayType.TABLE}
+          >
             <TableViewIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Table view">
-          <IconButton onClick={() => setDisplayType(DisplayType.PIE)}>
+        <Tooltip title="Pie chart view">
+          <IconButton
+            onClick={() => setDisplayType(DisplayType.PIE)}
+            disabled={displayType === DisplayType.PIE}
+          >
             <PieChartIcon fontSize="large" />
           </IconButton>
         </Tooltip>
