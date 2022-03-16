@@ -39,7 +39,8 @@ import { PieChart } from "react-minimal-pie-chart";
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
 // TODO: Female vs. male life expectancy
 // TODO: Look into replacing make with tasks
-// TODO: test sign out button
+// TODO: Test sign out button
+// TODO: Test pie chart stats
 function BirthdateForm() {
   const classes = liwStyles();
   const [birthdateInput, setBirthdateInput] = useState<Date | null>(null);
@@ -125,6 +126,7 @@ export default function LifeInWeeks(): JSX.Element {
           <IconButton
             onClick={() => setDisplayType(DisplayType.TABLE)}
             disabled={displayType === DisplayType.TABLE}
+            data-cy="liw-display-table-button"
           >
             <TableViewIcon fontSize="large" />
           </IconButton>
@@ -133,6 +135,7 @@ export default function LifeInWeeks(): JSX.Element {
           <IconButton
             onClick={() => setDisplayType(DisplayType.PIE)}
             disabled={displayType === DisplayType.PIE}
+            data-cy="liw-display-pie-chart-button"
           >
             <PieChartIcon fontSize="large" />
           </IconButton>
@@ -196,12 +199,12 @@ function PieChartDisplay({
     Math.round(AVERAGE_LIFE_EXPECTANCY_MALE * EXACT_WEEKS_PER_YEAR)
   );
   const weeksLived = weeksBetween(birthdate, now);
-  const weeksToLive = weeksBetween(now, expectedLastDate) - 1; // subtract one for the current week
+  let weeksToLive = weeksBetween(now, expectedLastDate);
+  weeksToLive = weeksToLive > 0 ? weeksToLive : 0;
   console.log(`weeksLived: ${weeksLived}, weeksToLive: ${weeksToLive}`);
 
   const data = [
     { title: "Weeks lived", value: weeksLived, color: "#E38627" },
-    { title: "Current week", value: 1, color: "#C13C37" },
     { title: "Weeks left", value: weeksToLive, color: "#6A2135" },
   ];
 
@@ -218,7 +221,7 @@ function PieChartDisplay({
     });
 
   return (
-    <Box height={MAX_VH} data-tip="" data-for="chart">
+    <Box height={MAX_VH} data-tip="" data-for="chart" data-cy="liw-pie-chart">
       <PieChart
         style={{
           fontFamily:

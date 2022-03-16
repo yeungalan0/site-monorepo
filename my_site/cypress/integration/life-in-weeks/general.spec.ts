@@ -52,7 +52,12 @@ describe("life-in-weeks", () => {
       .should("be.enabled")
       .click();
 
-    cy.get("[data-cy=liw-table]", { timeout: 10000 }).should("be.visible");
+    cy.get("[data-cy=liw-pie-chart]", { timeout: 10000 }).should("be.visible");
+
+    cy.get("[data-cy=liw-display-pie-chart-button]").should("be.disabled");
+    cy.get("[data-cy=liw-display-table-button]").click();
+    cy.get("[data-cy=liw-display-table-button]").should("be.disabled");
+    cy.get("[data-cy=liw-display-pie-chart-button]").should("be.enabled");
   });
 
   it("should have proper checked/disabled boxes near end of birth year", () => {
@@ -65,6 +70,8 @@ describe("life-in-weeks", () => {
     cy.clock(now, ["Date"]);
     cy.login(user);
     cy.visit(endpoint);
+
+    cy.get("[data-cy=liw-display-table-button]").click();
 
     cy.get("[data-cy=liw-table]", { timeout: 10000 })
       .should("be.visible")
@@ -112,6 +119,8 @@ describe("life-in-weeks", () => {
     cy.login(user);
     cy.visit(endpoint);
 
+    cy.get("[data-cy=liw-display-table-button]").click();
+
     cy.get(`[data-tip='${now.toLocaleDateString("en-US")}']`)
       .should("not.be.checked")
       .click()
@@ -131,6 +140,8 @@ describe("life-in-weeks", () => {
     cy.clock(now, ["Date"]);
     cy.login(user);
     cy.visit(endpoint);
+
+    cy.get("[data-cy=liw-display-table-button]").click();
 
     cy.get(`[data-tip='${lastWeekOfLife.toLocaleDateString("en-US")}']`)
       .should("be.checked")
