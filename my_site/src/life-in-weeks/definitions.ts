@@ -1,10 +1,14 @@
-export const WEEKS_PER_YEAR = 52;
+export const APPROX_WEEKS_PER_YEAR = 52;
+
+export const EXACT_WEEKS_PER_YEAR = 52.143;
 
 export const AVERAGE_LIFE_EXPECTANCY_MALE = 76.3;
 
 export const CELL_WIDTH = ".75%";
 
 export const TEST_ENV = "test";
+
+export const MAX_VH = "85vh";
 
 export type PeopleData = {
   resourceName: string;

@@ -9,12 +9,14 @@ import {
   TextField,
   Button,
   ClassNameMap,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Paper from "@mui/material/Paper";
 import { addYears, addWeeks } from "date-fns";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ReactTooltip from "react-tooltip";
 import { Box } from "@mui/system";
@@ -25,13 +27,17 @@ import { LoadingCircle } from "../src/utils";
 import {
   AVERAGE_LIFE_EXPECTANCY_MALE,
   CELL_WIDTH,
-  WEEKS_PER_YEAR,
+  APPROX_WEEKS_PER_YEAR,
+  EXACT_WEEKS_PER_YEAR,
+  MAX_VH,
 } from "../src/life-in-weeks/definitions";
+import TableViewIcon from "@mui/icons-material/TableView";
+import PieChartIcon from "@mui/icons-material/PieChart";
+import { PieChart } from "react-minimal-pie-chart";
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
 // TODO: Female vs. male life expectancy
-// TODO: Hourglass for mobile https://codepen.io/tag/hourglass?cursor=ZD0xJm89MCZwPTE=
 // TODO: Look into replacing make with tasks
 // TODO: test sign out button
 function BirthdateForm() {
@@ -100,10 +106,11 @@ function BirthdateForm() {
 }
 
 export default function LifeInWeeks(): JSX.Element {
-  const classes = liwStyles();
   const { status, data: session } = useSession({
     required: true,
   });
+
+  const [displayType, setDisplayType] = useState<DisplayType>(DisplayType.PIE);
 
   if (status === "loading") {
     return <LoadingCircle />;
@@ -111,27 +118,143 @@ export default function LifeInWeeks(): JSX.Element {
     return <BirthdateForm />;
   }
 
-  const columns = getColumns();
-  const rows = getRows(session.birthdate, classes);
-
   return (
     <>
-      {/* Signed in as {session?.user?.email} <br />
-      {JSON.stringify(session)}
-      <br />
-      {} */}
-      {/* <Button onClick={() => signOut()}>Sign out</Button> */}
-      <TableContainer component={Paper} sx={{ maxHeight: "80vh" }}>
-        <Table stickyHeader aria-label="simple table" data-cy="liw-table">
-          <TableHead>
-            <TableRow>{columns}</TableRow>
-          </TableHead>
-          <TableBody>{rows}</TableBody>
-        </Table>
-      </TableContainer>
-      <ReactTooltip id="dateDisplay" data-for="dateDisplay" delayShow={500} />
+      <Box justifyContent="center" alignItems="center" display="flex">
+        <Tooltip title="Table view">
+          <IconButton onClick={() => setDisplayType(DisplayType.TABLE)}>
+            <TableViewIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Table view">
+          <IconButton onClick={() => setDisplayType(DisplayType.PIE)}>
+            <PieChartIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <LifeInWeeksDisplay
+        displayType={displayType}
+        birthdateString={session.birthdate}
+      />
     </>
   );
+}
+
+function LifeInWeeksDisplay({
+  displayType,
+  birthdateString,
+}: {
+  displayType: DisplayType;
+  birthdateString: string;
+}): JSX.Element {
+  const classes = liwStyles();
+  const columns = getColumns();
+  const rows = getRows(birthdateString, classes);
+
+  if (displayType === DisplayType.TABLE) {
+    return (
+      <>
+        <TableContainer component={Paper} sx={{ maxHeight: MAX_VH }}>
+          <Table stickyHeader aria-label="simple table" data-cy="liw-table">
+            <TableHead>
+              <TableRow>{columns}</TableRow>
+            </TableHead>
+            <TableBody>{rows}</TableBody>
+          </Table>
+        </TableContainer>
+        <ReactTooltip id="dateDisplay" data-for="dateDisplay" delayShow={500} />
+      </>
+    );
+  } else {
+    return <PieChartDisplay birthdateString={birthdateString} />;
+  }
+}
+
+function PieChartDisplay({
+  birthdateString,
+}: {
+  birthdateString: string;
+}): JSX.Element {
+  const [selected, setSelected] = useState<number | undefined>(0);
+  const [hovered, setHovered] = useState<number | undefined>(undefined);
+
+  const lineWidth = 60;
+  const weeksBetween = (d1: Date, d2: Date) => {
+    const weekInMillis = 7 * 24 * 60 * 60 * 1000;
+    return Math.round((d2.getTime() - d1.getTime()) / weekInMillis);
+  };
+  const now = new Date();
+  const birthdate = new Date(birthdateString);
+  const expectedLastDate = addWeeks(
+    birthdate,
+    Math.round(AVERAGE_LIFE_EXPECTANCY_MALE * EXACT_WEEKS_PER_YEAR)
+  );
+  const weeksLived = weeksBetween(birthdate, now);
+  const weeksToLive = weeksBetween(now, expectedLastDate) - 1; // subtract one for the current week
+  console.log(`weeksLived: ${weeksLived}, weeksToLive: ${weeksToLive}`);
+
+  const data = [
+    { title: "Weeks lived", value: weeksLived, color: "#E38627" },
+    { title: "Current week", value: 1, color: "#C13C37" },
+    { title: "Weeks left", value: weeksToLive, color: "#6A2135" },
+  ];
+
+  const updatedData: { color: string; tooltip?: string; value: number }[] =
+    data.map(({ title, ...entry }, i) => {
+      if (hovered === i) {
+        return {
+          ...entry,
+          color: "grey",
+          tooltip: title,
+        };
+      }
+      return entry;
+    });
+
+  return (
+    <Box height={MAX_VH} data-tip="" data-for="chart">
+      <PieChart
+        style={{
+          fontFamily:
+            '"Nunito Sans", -apple-system, Helvetica, Arial, sans-serif',
+          fontSize: "8px",
+        }}
+        data={updatedData}
+        radius={40}
+        lineWidth={60}
+        segmentsStyle={{ transition: "stroke .3s", cursor: "pointer" }}
+        segmentsShift={(index) => (index === selected ? 6 : 1)}
+        animate
+        label={({ dataEntry }) => Math.round(dataEntry.percentage) + "%"}
+        labelPosition={100 - lineWidth / 2}
+        labelStyle={{
+          fill: "#fff",
+          opacity: 0.75,
+          pointerEvents: "none",
+        }}
+        onClick={(_, index) => {
+          setSelected(index === selected ? undefined : index);
+        }}
+        onMouseOver={(_, index) => {
+          setHovered(index);
+        }}
+        onMouseOut={() => {
+          setHovered(undefined);
+        }}
+      />
+      <ReactTooltip
+        id="chart"
+        getContent={() =>
+          typeof hovered === "number" ? updatedData[hovered]?.tooltip : null
+        }
+      />
+    </Box>
+  );
+}
+
+enum DisplayType {
+  TABLE = "table",
+  PIE = "pie",
 }
 
 function getColumns(): JSX.Element[] {
@@ -141,7 +264,7 @@ function getColumns(): JSX.Element[] {
     </TableCell>,
   ];
 
-  for (let i = 0; i < WEEKS_PER_YEAR; i++) {
+  for (let i = 0; i < APPROX_WEEKS_PER_YEAR; i++) {
     const weekNumber = i + 1;
     columns.push(
       <TableCell
@@ -205,7 +328,7 @@ function getRows(
 
     for (let i = 0; i < weeks; i++) {
       // Set the next date to work with
-      if (i < WEEKS_PER_YEAR - 1) {
+      if (i < APPROX_WEEKS_PER_YEAR - 1) {
         // For 51 weeks, add a week to the next date
         cellDate = addWeeks(cellDate, 1);
       } else {
@@ -248,7 +371,9 @@ function getRows(
     const yearsLeft = AVERAGE_LIFE_EXPECTANCY_MALE - yearsLived;
     // Either you have a full year left or a partial year of weeks left
     const weeks =
-      yearsLeft > 1 ? WEEKS_PER_YEAR : Math.round(WEEKS_PER_YEAR * yearsLeft);
+      yearsLeft > 1
+        ? APPROX_WEEKS_PER_YEAR
+        : Math.round(APPROX_WEEKS_PER_YEAR * yearsLeft);
     rows.push(createRow(weeks, yearsLived));
     yearsLived += 1;
   }

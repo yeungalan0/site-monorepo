@@ -1,7 +1,7 @@
 import { addWeeks, addYears, subDays } from "date-fns";
 import {
   AVERAGE_LIFE_EXPECTANCY_MALE,
-  WEEKS_PER_YEAR,
+  APPROX_WEEKS_PER_YEAR,
 } from "../../../src/life-in-weeks/definitions";
 
 beforeEach(() => {
@@ -58,7 +58,7 @@ describe("life-in-weeks", () => {
   it("should have proper checked/disabled boxes near end of birth year", () => {
     const now = addYears(mortyBirthdate, 1);
     const expectedRows = Math.floor(AVERAGE_LIFE_EXPECTANCY_MALE) + 1;
-    const expectedCols = WEEKS_PER_YEAR + 1;
+    const expectedCols = APPROX_WEEKS_PER_YEAR + 1;
 
     // Target date object specifically for this loading bug:
     // https://github.com/cypress-io/cypress/issues/7455
