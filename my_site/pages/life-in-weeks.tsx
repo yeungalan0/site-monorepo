@@ -11,29 +11,33 @@ import {
   ClassNameMap,
   Tooltip,
   IconButton,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Paper from "@mui/material/Paper";
-import { addYears, addWeeks } from "date-fns";
+import { addYears, addWeeks, intervalToDuration } from "date-fns";
 import { useSession } from "next-auth/react";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ReactTooltip from "react-tooltip";
 import { Box } from "@mui/system";
-import { useState } from "react";
-import { isValidDate } from "../src/life-in-weeks/utils";
+import { useEffect, useMemo, useState } from "react";
+import { capitalizeFirst, isValidDate } from "../src/life-in-weeks/utils";
 import { liwStyles } from "../src/life-in-weeks/styles";
 import { LoadingCircle } from "../src/utils";
 import {
-  AVERAGE_LIFE_EXPECTANCY_MALE,
+  AVERAGE_LIFE_EXPECTANCY_YEARS_MALE,
   CELL_WIDTH,
   APPROX_WEEKS_PER_YEAR,
-  EXACT_WEEKS_PER_YEAR,
   MAX_VH,
+  AVERAGE_LIFE_EXPECTANCY_MILLIS_MALE,
 } from "../src/life-in-weeks/definitions";
 import TableViewIcon from "@mui/icons-material/TableView";
-import PieChartIcon from "@mui/icons-material/PieChart";
 import { PieChart } from "react-minimal-pie-chart";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 
 // TODO: Add stats
 // TODO: Next-auth sign in theme preference: https://github.com/mui/material-ui/issues/15588
@@ -111,7 +115,9 @@ export default function LifeInWeeks(): JSX.Element {
     required: true,
   });
 
-  const [displayType, setDisplayType] = useState<DisplayType>(DisplayType.PIE);
+  const [displayType, setDisplayType] = useState<DisplayType>(
+    DisplayType.ANALYTICS
+  );
 
   if (status === "loading") {
     return <LoadingCircle />;
@@ -131,13 +137,13 @@ export default function LifeInWeeks(): JSX.Element {
             <TableViewIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Pie chart view">
+        <Tooltip title="Stats view">
           <IconButton
-            onClick={() => setDisplayType(DisplayType.PIE)}
-            disabled={displayType === DisplayType.PIE}
-            data-cy="liw-display-pie-chart-button"
+            onClick={() => setDisplayType(DisplayType.ANALYTICS)}
+            disabled={displayType === DisplayType.ANALYTICS}
+            data-cy="liw-display-stats-button"
           >
-            <PieChartIcon fontSize="large" />
+            <AnalyticsIcon />
           </IconButton>
         </Tooltip>
       </Box>
@@ -157,10 +163,15 @@ function LifeInWeeksDisplay({
   birthdateString: string;
 }): JSX.Element {
   const classes = liwStyles();
-  const columns = getColumns();
-  const rows = getRows(birthdateString, classes);
+  const birthdate = new Date(birthdateString);
+  const deathdate = new Date(
+    birthdate.getTime() + AVERAGE_LIFE_EXPECTANCY_MILLIS_MALE
+  );
 
   if (displayType === DisplayType.TABLE) {
+    const columns = getColumns();
+    const rows = getRows(birthdate, classes);
+
     return (
       <>
         <TableContainer component={Paper} sx={{ maxHeight: MAX_VH }}>
@@ -175,14 +186,111 @@ function LifeInWeeksDisplay({
       </>
     );
   } else {
-    return <PieChartDisplay birthdateString={birthdateString} />;
+    return <StatsDisplay birthdate={birthdate} deathdate={deathdate} />;
   }
 }
 
-function PieChartDisplay({
-  birthdateString,
+function StatsDisplay({
+  birthdate,
+  deathdate,
 }: {
-  birthdateString: string;
+  birthdate: Date;
+  deathdate: Date;
+}): JSX.Element {
+  return (
+    <Grid container direction="column" padding="2em">
+      <Grid container item justifyContent="center" spacing={2}>
+        <Box display="flex" justifyContent="center" padding="1em">
+          <TimerDisplay deathdate={deathdate} />
+        </Box>
+      </Grid>
+      <Grid container item justifyContent="center" spacing={2}>
+        <PieChartDisplay birthdate={birthdate} deathdate={deathdate} />
+      </Grid>
+    </Grid>
+  );
+}
+
+function TimerDisplay({ deathdate }: { deathdate: Date }): JSX.Element {
+  const initialDuration = useMemo(
+    () => intervalToDuration({ start: new Date(), end: deathdate }),
+    []
+  );
+  const [timeLeft, setTimeLeft] = useState(initialDuration);
+
+  useEffect(() => {
+    const reactInterval = setInterval(() => {
+      const currentTimeLeft = intervalToDuration({
+        start: new Date(),
+        end: deathdate,
+      });
+
+      const deathdatePassed = Object.values(currentTimeLeft).every(
+        (v) => v === 0
+      );
+      if (deathdatePassed) {
+        clearInterval(reactInterval);
+      }
+
+      setTimeLeft(currentTimeLeft);
+    }, 1000);
+
+    return () => {
+      clearInterval(reactInterval);
+    };
+  }, []);
+
+  const countDownElements: JSX.Element[] = [];
+  const totalKeys = Object.keys(timeLeft).length;
+  let currentKey = 0;
+
+  for (const [duration, value] of Object.entries(timeLeft)) {
+    currentKey++;
+
+    countDownElements.push(
+      <Card sx={{ border: "none" }} variant="outlined">
+        <CardContent
+          sx={{
+            textAlign: "center",
+          }}
+        >
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {capitalizeFirst(duration)}
+          </Typography>
+          <Typography variant="h5">{value}</Typography>
+        </CardContent>
+      </Card>
+    );
+
+    if (currentKey < totalKeys) {
+      countDownElements.push(
+        <Box display="flex" alignItems="center" height="100%">
+          <Typography variant="h4" alignContent="center">
+            :
+          </Typography>
+        </Box>
+      );
+    }
+  }
+
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      padding="1em"
+      data-cy="liw-timer"
+    >
+      {countDownElements}
+    </Box>
+  );
+}
+
+function PieChartDisplay({
+  birthdate,
+  deathdate,
+}: {
+  birthdate: Date;
+  deathdate: Date;
 }): JSX.Element {
   const [selected, setSelected] = useState<number | undefined>(0);
   const [hovered, setHovered] = useState<number | undefined>(undefined);
@@ -193,13 +301,8 @@ function PieChartDisplay({
     return Math.round((d2.getTime() - d1.getTime()) / weekInMillis);
   };
   const now = new Date();
-  const birthdate = new Date(birthdateString);
-  const expectedLastDate = addWeeks(
-    birthdate,
-    Math.round(AVERAGE_LIFE_EXPECTANCY_MALE * EXACT_WEEKS_PER_YEAR)
-  );
   const weeksLived = weeksBetween(birthdate, now);
-  let weeksToLive = weeksBetween(now, expectedLastDate);
+  let weeksToLive = weeksBetween(now, deathdate);
   weeksToLive = weeksToLive > 0 ? weeksToLive : 0;
   console.log(`weeksLived: ${weeksLived}, weeksToLive: ${weeksToLive}`);
 
@@ -262,8 +365,8 @@ function PieChartDisplay({
 }
 
 enum DisplayType {
+  ANALYTICS = "analytics",
   TABLE = "table",
-  PIE = "pie",
 }
 
 function getColumns(): JSX.Element[] {
@@ -291,12 +394,11 @@ function getColumns(): JSX.Element[] {
 }
 
 function getRows(
-  birthdateString: string,
+  birthdate: Date,
   classes: ClassNameMap<"birthdateFormStyles" | "cellStyles">
 ): JSX.Element[] {
-  const birthday = new Date(birthdateString);
   const rows = [];
-  let cellDate = birthday;
+  let cellDate = birthdate;
   const nowInMillis = Date.now();
 
   // console.log(`NOW: ${new Date().toLocaleDateString("en-US")}`); // Save for testing
@@ -342,7 +444,7 @@ function getRows(
         cellDate = addWeeks(cellDate, 1);
       } else {
         // Done with row, set to start of a new row
-        cellDate = addYears(birthday, yearsLived + 1);
+        cellDate = addYears(birthdate, yearsLived + 1);
       }
 
       const cellSettings = getCellSettings(currentCellDate, cellDate);
@@ -376,8 +478,8 @@ function getRows(
 
   let yearsLived = 0;
 
-  while (yearsLived < AVERAGE_LIFE_EXPECTANCY_MALE) {
-    const yearsLeft = AVERAGE_LIFE_EXPECTANCY_MALE - yearsLived;
+  while (yearsLived < AVERAGE_LIFE_EXPECTANCY_YEARS_MALE) {
+    const yearsLeft = AVERAGE_LIFE_EXPECTANCY_YEARS_MALE - yearsLived;
     // Either you have a full year left or a partial year of weeks left
     const weeks =
       yearsLeft > 1
