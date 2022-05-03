@@ -15,6 +15,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { isEmpty } from "lodash";
 import { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import {
@@ -31,7 +32,7 @@ import { VALID_TAGS } from "../src/blog/constants";
 import { getSortedPostsSummaryData, PostData } from "../src/blog/lib/posts";
 import { blogStyles } from "../src/blog/styles/styles";
 import { DefaultLayout } from "../src/layout";
-import { fetcher, isEmpty } from "../src/utils";
+import { fetcher } from "../src/utils";
 import {
   FilterKeys,
   getQueryParams,

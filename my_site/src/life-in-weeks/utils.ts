@@ -123,3 +123,7 @@ export async function seedNextAuthTable(
   await dynamoAdapter.createUser({ ...userObject });
   return null;
 }
+
+export function capitalizeFirst(s: string): string {
+  return s && s[0].toUpperCase() + s.slice(1);
+}

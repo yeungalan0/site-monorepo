@@ -1,7 +1,7 @@
 import { addWeeks, addYears, subDays } from "date-fns";
 import {
-  AVERAGE_LIFE_EXPECTANCY_MALE,
-  WEEKS_PER_YEAR,
+  AVERAGE_LIFE_EXPECTANCY_YEARS_MALE,
+  APPROX_WEEKS_PER_YEAR,
 } from "../../../src/life-in-weeks/definitions";
 
 beforeEach(() => {
@@ -52,19 +52,27 @@ describe("life-in-weeks", () => {
       .should("be.enabled")
       .click();
 
-    cy.get("[data-cy=liw-table]", { timeout: 10000 }).should("be.visible");
+    cy.get("[data-cy=liw-pie-chart]").should("be.visible");
+    cy.get("[data-cy=liw-timer]").should("be.visible");
+
+    cy.get("[data-cy=liw-display-stats-button]").should("be.disabled");
+    cy.get("[data-cy=liw-display-table-button]").click();
+    cy.get("[data-cy=liw-display-table-button]").should("be.disabled");
+    cy.get("[data-cy=liw-display-stats-button]").should("be.enabled");
   });
 
   it("should have proper checked/disabled boxes near end of birth year", () => {
     const now = addYears(mortyBirthdate, 1);
-    const expectedRows = Math.floor(AVERAGE_LIFE_EXPECTANCY_MALE) + 1;
-    const expectedCols = WEEKS_PER_YEAR + 1;
+    const expectedRows = Math.floor(AVERAGE_LIFE_EXPECTANCY_YEARS_MALE) + 1;
+    const expectedCols = APPROX_WEEKS_PER_YEAR + 1;
 
     // Target date object specifically for this loading bug:
     // https://github.com/cypress-io/cypress/issues/7455
     cy.clock(now, ["Date"]);
     cy.login(user);
     cy.visit(endpoint);
+
+    cy.get("[data-cy=liw-display-table-button]").click();
 
     cy.get("[data-cy=liw-table]", { timeout: 10000 })
       .should("be.visible")
@@ -103,7 +111,7 @@ describe("life-in-weeks", () => {
   it("should have proper checked boxes during last day of life", () => {
     const lastYearOfLife = addYears(
       mortyBirthdate,
-      AVERAGE_LIFE_EXPECTANCY_MALE
+      AVERAGE_LIFE_EXPECTANCY_YEARS_MALE
     );
     const remainingWeeksTillLast = 15;
     const now = addWeeks(lastYearOfLife, remainingWeeksTillLast);
@@ -111,6 +119,8 @@ describe("life-in-weeks", () => {
     cy.clock(now, ["Date"]);
     cy.login(user);
     cy.visit(endpoint);
+
+    cy.get("[data-cy=liw-display-table-button]").click();
 
     cy.get(`[data-tip='${now.toLocaleDateString("en-US")}']`)
       .should("not.be.checked")
@@ -122,7 +132,7 @@ describe("life-in-weeks", () => {
   it("should all be checked after average lifespan", () => {
     const lastYearOfLife = addYears(
       mortyBirthdate,
-      AVERAGE_LIFE_EXPECTANCY_MALE
+      AVERAGE_LIFE_EXPECTANCY_YEARS_MALE
     );
     const remainingWeeksTillLast = 15;
     const lastWeekOfLife = addWeeks(lastYearOfLife, remainingWeeksTillLast);
@@ -131,6 +141,8 @@ describe("life-in-weeks", () => {
     cy.clock(now, ["Date"]);
     cy.login(user);
     cy.visit(endpoint);
+
+    cy.get("[data-cy=liw-display-table-button]").click();
 
     cy.get(`[data-tip='${lastWeekOfLife.toLocaleDateString("en-US")}']`)
       .should("be.checked")

@@ -35,16 +35,16 @@ class MyStack extends TerraformStack {
       hashKey: "pk",
       rangeKey: "sk",
       ttl: { enabled: true, attributeName: "expires" },
-      readCapacity: 10,
-      writeCapacity: 10,
+      readCapacity: 1,
+      writeCapacity: 1,
       globalSecondaryIndex: [
         {
           name: "GSI1",
           hashKey: "GSI1PK",
           rangeKey: "GSI1SK",
           projectionType: "ALL",
-          readCapacity: 10,
-          writeCapacity: 10,
+          readCapacity: 1,
+          writeCapacity: 1,
         },
       ],
       attribute: [
