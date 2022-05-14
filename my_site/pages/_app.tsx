@@ -22,8 +22,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     // style needed otherwise site might "flash" with different theme settings
     <div style={style}>
       <CustomThemeProvider>
-        <TopBar />
         <SessionProvider session={pageProps.session}>
+          <TopBar />
           <Component {...pageProps} />
         </SessionProvider>
       </CustomThemeProvider>

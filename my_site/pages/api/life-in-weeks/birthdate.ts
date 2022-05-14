@@ -31,7 +31,9 @@ export default async function handler(
       });
       res.status(200).json({ message: "Success" });
     } else {
-      console.warn("User not found in database");
+      console.warn(
+        `User not found in database, session: ${JSON.stringify(session)}`
+      );
       throw new BadRequestError("Error bad request");
     }
   } catch (err) {

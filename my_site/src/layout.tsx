@@ -1,21 +1,33 @@
 import {
   AppBar,
+  Box,
+  Divider,
+  Drawer,
   Grid,
   GridSize,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Slide,
-  Switch,
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
   useScrollTrigger,
 } from "@mui/material";
-import Brightness2Icon from "@mui/icons-material/Brightness2";
-import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, ReactElement, useContext } from "react";
+import { Fragment, ReactElement, useContext, useState } from "react";
 import { useStyles } from "./style";
 import { ToggleThemeContext } from "./theme-provider";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useSession, signOut } from "next-auth/react";
+import { darkTheme as theme } from "../src/theme";
+import MenuIcon from "@mui/icons-material/Menu";
 
 type DefaultLayoutProps = {
   children: JSX.Element | JSX.Element[];
@@ -38,9 +50,10 @@ type CustomGridSizes = {
   xl: GridSize | false;
 };
 
-function getEdgeSizes(
-  contentSize: GridSize | false
-): { leftEdge: GridSize | false; rightEdge: GridSize | false } {
+function getEdgeSizes(contentSize: GridSize | false): {
+  leftEdge: GridSize | false;
+  rightEdge: GridSize | false;
+} {
   let leftEdge: GridSize | false = Math.floor(
     (12 - (contentSize as number)) / 2
   ) as GridSize;
@@ -182,66 +195,166 @@ function HideOnScroll({
 }
 
 export function TopBar(): JSX.Element {
-  const classes = useStyles();
+  const { data: session, status } = useSession();
   const { toggleTheme, darkThemeActive } = useContext(ToggleThemeContext);
+  const isXSScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <HideOnScroll>
       <AppBar position="sticky" data-cy="top-bar">
         <DefaultGridLayout>
-          <Toolbar className={classes.toolbar}>
-            <Typography
-              color="textSecondary"
-              variant="h6"
-              className={classes.topic}
-            >
-              <Link href={`/blog`}>
-                <a data-cy="top-bar-blog">Blog</a>
-              </Link>
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="h6"
-              className={classes.topic}
-            >
-              <Link href={`/about`}>
-                <a data-cy="top-bar-about">About</a>
-              </Link>
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="h6"
-              className={classes.topic}
-            >
-              <Link href={`/blog?tags=projects`}>
-                <a data-cy="top-bar-projects">Projects</a>
-              </Link>
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="h6"
-              className={classes.topic}
-            >
-              <Link href={`/resume/resume_cv.pdf`}>
-                <a data-cy="top-bar-resume">Resume</a>
-              </Link>
-            </Typography>
-            <Tooltip title="Toggle Theme">
-              <Switch
-                checked={darkThemeActive}
-                onChange={toggleTheme}
-                icon={<WbSunnyIcon fontSize="small" />}
-                checkedIcon={<Brightness2Icon fontSize="small" />}
-                color="default"
-                // Ignoring this per: https://github.com/mui-org/material-ui/issues/20160
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                inputProps={{ "data-cy": "top-bar-toggle-theme" }}
-              />
-            </Tooltip>
-          </Toolbar>
+          {isXSScreen ? (
+            <MobileTopBar
+              toggleTheme={toggleTheme}
+              darkThemeActive={darkThemeActive}
+              status={status}
+            />
+          ) : (
+            <DesktopTopBar
+              toggleTheme={toggleTheme}
+              darkThemeActive={darkThemeActive}
+              status={status}
+            />
+          )}
         </DefaultGridLayout>
       </AppBar>
     </HideOnScroll>
+  );
+}
+
+function DesktopTopBar({
+  toggleTheme,
+  darkThemeActive,
+  status,
+}: {
+  toggleTheme: () => void;
+  darkThemeActive: boolean;
+  status: "authenticated" | "loading" | "unauthenticated";
+}): JSX.Element {
+  const classes = useStyles();
+
+  return (
+    <Toolbar className={classes.desktopTopBar}>
+      <Typography color="textSecondary" variant="h6" className={classes.topic}>
+        <Link href={`/blog`}>
+          <a data-cy="top-bar-blog">Blog</a>
+        </Link>
+      </Typography>
+      <Typography color="textSecondary" variant="h6" className={classes.topic}>
+        <Link href={`/about`}>
+          <a data-cy="top-bar-about">About</a>
+        </Link>
+      </Typography>
+      <Typography color="textSecondary" variant="h6" className={classes.topic}>
+        <Link href={`/blog?tags=projects`}>
+          <a data-cy="top-bar-projects">Projects</a>
+        </Link>
+      </Typography>
+      <Typography color="textSecondary" variant="h6" className={classes.topic}>
+        <Link href={`/resume`}>
+          <a data-cy="top-bar-resume">Resume</a>
+        </Link>
+      </Typography>
+      <Tooltip title="Toggle Theme">
+        <IconButton
+          sx={{ ml: 1 }}
+          onClick={toggleTheme}
+          color="inherit"
+          data-cy="top-bar-toggle-theme"
+        >
+          {darkThemeActive ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Tooltip>
+      {status === "authenticated" && (
+        <Tooltip title="Sign Out">
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={() => {
+              signOut();
+            }}
+            color="inherit"
+            data-cy="top-bar-sign-out"
+          >
+            <LogoutIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Toolbar>
+  );
+}
+
+function MobileTopBar({
+  toggleTheme,
+  darkThemeActive,
+  status,
+}: {
+  toggleTheme: () => void;
+  darkThemeActive: boolean;
+  status: "authenticated" | "loading" | "unauthenticated";
+}): JSX.Element {
+  const [drawerIsVisible, setDrawerIsVisible] = useState(false);
+
+  const list = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => setDrawerIsVisible(false)}
+      onKeyDown={() => setDrawerIsVisible(false)}
+    >
+      <List>
+        <ListItem button component="a" href="/blog" data-cy="top-bar-blog">
+          <ListItemText primary="Blog" />
+        </ListItem>
+        <ListItem button component="a" href="/about" data-cy="top-bar-about">
+          <ListItemText primary="About" />
+        </ListItem>
+        <ListItem
+          button
+          component="a"
+          href="/blog?tags=projects"
+          data-cy="top-bar-projects"
+        >
+          <ListItemText primary="Projects" />
+        </ListItem>
+        <ListItem button component="a" href="/resume" data-cy="top-bar-resume">
+          <ListItemText primary="Resume" />
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button onClick={toggleTheme}>
+          <ListItemIcon>
+            {darkThemeActive ? <Brightness7Icon /> : <Brightness4Icon />}
+          </ListItemIcon>
+          <ListItemText primary="Toggle theme" />
+        </ListItem>
+        {status === "authenticated" && (
+          <ListItem button onClick={() => signOut()}>
+            <ListItemIcon data-cy="top-bar-sign-out">
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Sign out" />
+          </ListItem>
+        )}
+      </List>
+    </Box>
+  );
+
+  return (
+    <Toolbar>
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        sx={{ mr: 2 }}
+        onClick={() => setDrawerIsVisible(true)}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Drawer open={drawerIsVisible} onClose={() => setDrawerIsVisible(false)}>
+        {list}
+      </Drawer>
+    </Toolbar>
   );
 }

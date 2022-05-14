@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
       textDecoration: "underline",
     },
   },
-  toolbar: {
+  desktopTopBar: {
     justifyContent: "space-evenly",
   },
   title: {

@@ -1,36 +1,50 @@
 import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
-import { AwsProvider, dynamodb } from "./.gen/providers/aws";
-
+import { App, S3Backend, TerraformStack } from "cdktf";
+import { AwsProvider, dynamodb } from "@cdktf/provider-aws";
+import {
+  DEFAULT_REGION,
+  getEndpoints,
+  isTestEnv,
+  NEXT_AUTH_DYNAMODB_TABLE,
+  TERRAFORM_BUCKET,
+  TERRAFORM_DYNAMODB_TABLE,
+} from "../definitions";
 class MyStack extends TerraformStack {
   constructor(scope: Construct, name: string) {
     super(scope, name);
 
+    const myEndpoints = getEndpoints();
+
+    if (!isTestEnv) {
+      new S3Backend(this, {
+        bucket: TERRAFORM_BUCKET,
+        region: process.env.AWS_REGION ?? DEFAULT_REGION,
+        key: "terraform.tfstate",
+        dynamodbTable: TERRAFORM_DYNAMODB_TABLE,
+      });
+    }
+
     new AwsProvider(this, "aws", {
-      region: "us-east-1",
-      endpoints: [
-        {
-          dynamodb: "http://localhost:4566",
-          sts: "http://localhost:4566",
-        },
-      ],
+      region: process.env.AWS_REGION ?? DEFAULT_REGION,
+      endpoints: myEndpoints,
+      skipCredentialsValidation: isTestEnv,
     });
 
     new dynamodb.DynamodbTable(this, `NextAuthTable`, {
-      name: "next-auth",
+      name: NEXT_AUTH_DYNAMODB_TABLE,
       hashKey: "pk",
       rangeKey: "sk",
       ttl: { enabled: true, attributeName: "expires" },
-      readCapacity: 10, // TODO
-      writeCapacity: 10,
+      readCapacity: 1,
+      writeCapacity: 1,
       globalSecondaryIndex: [
         {
           name: "GSI1",
           hashKey: "GSI1PK",
           rangeKey: "GSI1SK",
           projectionType: "ALL",
-          readCapacity: 10,
-          writeCapacity: 10,
+          readCapacity: 1,
+          writeCapacity: 1,
         },
       ],
       attribute: [

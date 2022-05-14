@@ -1,11 +1,19 @@
-test-env: 
-	bash -c "trap 'make clean' EXIT; \
-	SERVICES=dynamodb,sts localstack start -d; \
-	cdktf deploy --auto-approve; \
+test-env:
+	bash -c "trap 'make clean' EXIT && \
+	export ENVIRONMENT=test AWS_REGION=us-west-2 && \
+	SERVICES=dynamodb,s3,sts,iam localstack start -d && \
+	rm -rf cdktf.out/ terraform.life_in_weeks.tfstate && \
+	cdktf deploy --auto-approve && \
 	DYNAMO_ENDPOINT=http://localhost:4566 dynamodb-admin"
 
 clean:
 	localstack stop
+
+# Note: Not using `cdktf deploy` here since I get a JSON error in github actions (perhaps some domain it talks to is blocked)
+github-deploy-env:
+	npm install
+	npx cdktf synth
+	cd cdktf.out/stacks/life_in_weeks && rm -rf .terraform && terraform init && terraform apply -auto-approve
 
 install:
 	pip install localstack
