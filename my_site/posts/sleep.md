@@ -76,11 +76,8 @@ valuing my sleep...by going to bed now. 😴
     not in bet on time...as my girlfriend will attest
 
 [sleep-search]: https://letmegooglethat.com/?q=is+sleep+really+that+important
-[sleep-site]:
-  https://www.sleepfoundation.org/how-sleep-works/why-do-we-need-sleep#:~:text=Sleep%20is%20an%20essential%20function,the%20brain%20cannot%20function%20properly.
+[sleep-site]: https://www.sleepfoundation.org/how-sleep-works/why-do-we-need-sleep#:~:text=Sleep%20is%20an%20essential%20function,the%20brain%20cannot%20function%20properly.
 [sleep-videos]: https://www.ted.com/search?q=sleep
-[sleep-superpower]:
-  https://www.ted.com/talks/matt_walker_sleep_is_your_superpower
-[sleep-benefits]:
-  https://health.gov/myhealthfinder/topics/everyday-healthy-living/mental-health-and-relationships/get-enough-sleep#panel-1
+[sleep-superpower]: https://www.ted.com/talks/matt_walker_sleep_is_your_superpower
+[sleep-benefits]: https://health.gov/myhealthfinder/topics/everyday-healthy-living/mental-health-and-relationships/get-enough-sleep#panel-1
 [sleep-hygiene]: https://www.cdc.gov/sleep/about_sleep/sleep_hygiene.html

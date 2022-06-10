@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import Link from "next/link";
 import { DefaultLayout } from "../src/layout";
 
 export default function Resume(): JSX.Element {
@@ -13,7 +14,12 @@ export default function Resume(): JSX.Element {
           type="application/pdf"
           style={{ width: "100%", height: "100%" }}
         >
-          <div>No online PDF viewer installed.</div>
+          <div>
+            No online PDF viewer installed. You can download my resume
+            <Link href={`/my-resume/resume_cv.pdf`}>
+              <a> here.</a>
+            </Link>
+          </div>
         </object>
       </Box>
     </DefaultLayout>

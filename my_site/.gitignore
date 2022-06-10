@@ -38,5 +38,5 @@ cypress/screenshots
 cypress/videos
 cypress.env.json
 
-/public/resume/*.log
-public/resume/resume_cv.synctex.gz
+resume_cv.*
+!resume_cv.pdf
