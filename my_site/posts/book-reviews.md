@@ -21,89 +21,89 @@ Format: Audio
 
 Overall I enjoyed this book. I thought there was one newish concept,
 and a lot of concepts I'd consider as great reminders that I need to know
-and should start applying. I think the timing of when I read this book may not
-have been the best, as I can't really find a lot of use for the information
-right at this moment (or at least can't clearly see the application), hence why
-I only rated it a 4. If it were a different point of my life where I could easily
-see the application it'd easily get a 5.
+and should start applying. I think this was not the right time for me to read
+this book, as I can't really find a lot of use for the information right at
+this moment (or at least can't clearly see the application), hence why I only
+rated it a 4. This book has the potential to be a 5 if I read it at a time when
+the information was more applicable to me.
 
 ## Result think
 
 - One of the central concepts in this book is about "result think", which is
   when you let the result of a decision hold far greater sway over your future
-  decisions than you should. Basically hindsight bias
+  decisions than you should. Basically, it's hindsight bias.
 - Duke makes use of the Story of the 2015 super bowl where the Seattle Seahawks
   played the New Englad Patriots, and there was a last minute pass play that was
   intercepted costing the Seahawks the game.
   - This was illustrated throughout the book as a wise decision before the play,
     with high likelihood to set the team up for success later on in the game,
     and a 2% chance of an interception occurring. Unfortunately for the Seahawks,
-    the 2% hit and it's all anyone could ever talk about
+    the 2% hit and it's all anyone could ever talk about.
 - It's only human nature to dwell on what happened, after all, that's what's
   concrete and that's all that matters, or at least it feels that way. And it's
-  usually a mistake to feel this way
+  usually a mistake to feel this way.
 - The message throughout this book is that results do matter, but in most
   situations there is no way to know what the result will be, so you should take
   the best bet in life, and let the dice fall however they may without losing too
-  much sleep over it
+  much sleep over it.
 - Ignoring results, and making wise bets over the long term is how you win. Kinda,
   the longer form is parsing out the skill from the luck in a result, and focusing
   on honing the skill while ignoring the luck aspect is how you win.
-- You control the process whereas results are largely outside of your control
-  (aside from the process)
+- You control the process, which in most cases is the only part of a result you
+  can control.
 
 ## Thinking in bets
 
 - The main tenant of this book is that whenever you have an idea, opinion, or
   hypothesis of the future, if you think about it like a bet you will think
-  about it a lot clearer
+  about it a lot clearer.
 - Often times people have opinions that they state as facts, because we live in
   a somewhat black and white world (at least that's the world we can see), either
-  something did happen or it didn't and for the future either it will or it won't
+  something did happen or it didn't and in the future either it will or it won't.
 - If we think about our opinion as a bet, instead of saying "the market will
   definitely fall by the end of the year", we can instead assess a confidence
-  interval/percentage on our bet, instead of just making a black/white guess
+  interval/percentage on our bet, instead of just making a black/white guess.
 - Thinking about it like a bet also changes your mindset and makes you really
-  consider the different possibilities as your money is on the line
+  consider the different possibilities as your money is on the line.
 - Another aspect that was also touched on slightly is that you can track your
-  bets and confidence intervals and really see how good (or more likely bad) you
-  are at guessing percentages, and refine your estimates in the future
-- Betting also puts your skin in the game, which is almost always a good thing
+  bets and confidence intervals and really see how good (or more likely how bad)
+  you are at guessing percentages, and refine your estimates in the future.
+- Betting also puts your skin in the game, which is almost always a good thing.
 
 ## Decision/Truth Seeking Group
 
 - Another big theme throughout the book is that you can make better decisions
-  with the help of a group than you can individually
+  with the help of a group than you can individually.
 - By forming a "decision group" and laying out rules about truth seeking and
   what it means to help with a decision vs. venting and complaining, you can
-  harness the power of the group to make better decisions
+  harness the power of the group to make better decisions.
 - This group should ideally be diverse in thought processes and have an odd
-  number of people, two to disagree and one to referee
+  number of people, two to disagree and one to referee.
 - You can also refer to the experiences of your past self, and infer your future
-  self experiences as well to aid in your decision making
+  self experiences as well to aid in your decision making.
 
 ## Misc Decision Making Advice
 
 - People will ever only hear whatever truth they want to/are ready to hear. This
   is confirmation bias, and there's no point in fighting it if someone doesn't
-  really want the truth
+  really want the truth.
 - There is also the 10/10/10 rule to make better decisions where you think about
   the consequences of a decision 10 minutes from now, 10 months from now, and 10
-  years from now
+  years from now.
 - Ulysses contracts were also an important idea on how to make better decisions.
   The name comes from Ulysses who had his crew tie him to the mast and cover their
-  own ears to avoid the sirens
+  own ears to avoid the sirens.
   - The idea is simply to force yourself to make a better decision in the future
     by tying your own hands, some examples are only playing until you lose X amount,
-    buying only healthy foods from the grocery store, paying for a gym membership
+    buying only healthy foods from the grocery store, and paying for a gym membership.
 - Working backwards from your goal to determine low probability events (or
   doing a pre-mortem) and then course correcting to best avoid those problematic
   events or increase the likelihood of the good events is useful.
   - Also this is a good practice to see how likely it is to achieve your goal in
-    the first place
+    the first place.
 - Duke also had the interesting idea of seeing the past, present, and future as
   tree. The trunk is the past, the future are the branches, and the present is
-  that little area where the two meet
+  that little area where the two meet.
 
 # Greenlights
 
