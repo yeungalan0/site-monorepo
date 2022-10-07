@@ -1,7 +1,7 @@
 ---
 title: "Life Lessons"
 date: "2022-10-07"
-tags: ["projects"]
+tags: ["values"]
 ---
 
 # Purpose
