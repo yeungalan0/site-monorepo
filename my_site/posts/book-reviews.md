@@ -9,6 +9,34 @@ tags: ["values"]
 Inspired by [Bryan Braun's](https://www.bryanbraun.com/books/) book review list,
 I thought I'd start a similar one of my own.
 
+# Bourdain: The Definitive Oral Biography
+
+Rating: 3/5
+
+Author: Laurie Woolever
+
+Read: 01/2022
+
+Format: Audio
+
+This was a good book summarizing Anthony Bourdain's life. He was a really interesting
+person with some demons, and some real gifts to share with the world. I really
+enjoyed learning about his past and the characteristics that got him to where
+he was. On the surface, it really seemed like he had the best job in the world.
+It was a life everyone envied, and I have definitely wanted a similar life from
+time to time. However, it was also a hard life that bred loneliness and a sense
+of disconnection. In the end, it's not clear why he chose to end his own life,
+but it sounds like even having a great job and a ton of money doesn't
+help much when the one you love is making you miserable.
+
+I'm glad I listened to the book, but didn't like how it kept changing narrators.
+
+## Lessons
+
+- You may not get many opportunities in life, try not to waste them
+- It may look great on the outside, but that doesn't mean it's not shit on the inside
+- Be who you are and have fun. Life's short and some people leave the game too early
+
 # Thinking in Bets
 
 Rating: 4/5
